@@ -30,4 +30,39 @@ qqnorm(residuals(cropanov)); plot(fitted(cropanov),residuals(cropanov))
 cropanov2=lm(crops~county+related,data=cropframe); anova(cropanov2)
 summary(cropanov2)  # non-significant main effects
 
-# now ANCOVA with the influence of the Size
+# 2(b) ANCOVA with the influence of the Size
+# Two ANCOVA test: (1) county + size
+cropframe = data.frame(
+  crops = crop_data$Crops, 
+  size = crop_data$Size,
+  county = factor(crop_data$County), 
+  related = factor(crop_data$Related))
+
+cropanov3=lm(crops~size+county,data=cropframe);anova(cropanov3)
+summary(cropanov3) # significant effect of size
+
+# test normality
+qqnorm(residuals(cropanov3)); plot(fitted(cropanov3),residuals(cropanov3))
+
+# test interaction effect size*county
+cropanov4=lm(crops~size*county,data=cropframe);anova(cropanov4)
+summary(cropanov4)   # significant interaction effect
+
+
+# (2) related + size
+cropanov5=lm(crops~size+related,data=cropframe);anova(cropanov5)
+summary(cropanov5)  # significant effect of size
+
+# test normality
+qqnorm(residuals(cropanov5)); plot(fitted(cropanov5),residuals(cropanov5))
+
+# test interaction effect
+cropanov6=lm(crops~size*related,data=cropframe);anova(cropanov6)
+summary(cropanov6)  # no significant interaction effect
+
+# (3) county + size + related
+cropanov7=lm(crops~county*related+size,data=cropframe);anova(cropanov7)
+summary(cropanov7) 
+
+# test normality
+qqnorm(residuals(cropanov7)); plot(fitted(cropanov7),residuals(cropanov7)) # normality may be violated
