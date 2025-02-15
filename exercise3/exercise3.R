@@ -79,23 +79,23 @@ data0$N = as.factor(data0$N)
 data0$P = as.factor(data0$P)
 data0$K = as.factor(data0$K)
 
-# model 1: yield ~ N + P + K + N:block
-model_1 = lm(yield ~ N + P + K + N:block, data = data0)
+# model 1: yield ~ block + N + P + K + N:block
+model_1 = lm(yield ~ block + N + P + K + N:block, data = data0)
 summary(model_1)
 anova(model_1)
 
-# model 2: yield ~ N + P + K + P:block
-model_2 = lm(yield ~ N + P + K + P:block, data = data0)
+# model 2: yield ~ block + N + P + K + P:block
+model_2 = lm(yield ~ block + N + P + K + P:block, data = data0)
 summary(model_2)
 anova(model_2)
 
-# model 3: yield ~ N + P + K + k:block
-model_3 = lm(yield ~ N + P + K + K:block, data = data0)
+# model 3: yield ~ block + N + P + K + k:block
+model_3 = lm(yield ~ block + N + P + K + K:block, data = data0)
 summary(model_3)
 anova(model_3)
 
-# model 4: yield ~ N + P + K + block
-model_4 = lm(yield ~ N + P + K + block, data = data0)
+# model 4: yield ~ block + N + P + K 
+model_4 = lm(yield ~ block + N + P + K, data = data0)
 summary(model_4)
 anova(model_4)
 
@@ -123,5 +123,16 @@ plot(fitted(model_4), residuals(model_4))
 model_1 = lm(yield ~ N + P + K + N:block, data = data0)
 summary(model_1)
 # best combination {(1, 0, 0), block3}
+
+########### f ###########
+library('MASS')
+library('lme4')
+data0 = npk
+
+model_mixed = lmer(yield ~ N + P + K + (1 | block) + (1 | block:N), data = data0)
+summary(model_mixed)
+anova(model_mixed)
+
+
 
 
