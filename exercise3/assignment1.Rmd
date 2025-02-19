@@ -1,0 +1,182 @@
+---
+title: "Experimental Design and Data Analysis - Assignment 1"
+author: "Group 5 - Ivana Malčić, Xuening Tang, Xiaoxuan Zhang"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(Matrix)
+```
+
+## Exercise 3: Yield of peas
+
+### Section a
+
+```{r}
+
+library('MASS')
+
+set.seed(123)  # add random seed for reproduce
+
+# initial params
+I <- 6  # blocks
+J <- 4  # plots per block
+
+# initial data frame
+randomized_design <- data.frame(block = rep(1:I, each = J), plot = rep(1:J, times = I))
+
+# for each block b, put (N, P, K) on each 2 plots randomly
+for (b in 1:I) {
+  plots <- sample(1:J, J, replace = FALSE)  # randomly reorder plots in each block
+  
+  # put N in the header 2 plots
+  randomized_design$N[randomized_design$block == b] <- ifelse(plots %in% plots[1:2], 1, 0)
+  
+  # randomly put P in 2 plots
+  randomized_design$P[randomized_design$block == b] <- ifelse(plots %in% sample(plots, 2), 1, 0)
+  
+  # randomly put K in 2 plots
+  randomized_design$K[randomized_design$block == b] <- ifelse(plots %in% sample(plots, 2), 1, 0)
+}
+
+# print the plots
+print(randomized_design)
+
+
+```
+
+### Section b
+
+```{r, fig.height = 6}
+
+# combine those yield in the same block same N, and calc its mean
+yield_matrix <- tapply(npk$yield, list(npk$block, npk$N), mean)
+
+# plot bars
+barplot(t(yield_matrix), beside = TRUE, col = c("red", "blue"),
+        main = "Average Yield per Block for Nitrogen Treatment",
+        xlab = "Block", ylab = "Average Yield")
+legend("top", legend = c("N=0", "N=1"), fill = c("red", "blue"))
+
+
+```
+
+This plot illustrates that the average yields for soil treated by N are higher than for untreated soil. What's more, each block and treatment tend to have a similar change.
+
+Meanwhile, we here have assigned treatments randomly to each soil within a block, which reduces the variation and get more precise results.
+
+### Section c
+
+```{r}
+
+data0 = npk
+data0$block = as.factor(data0$block)
+data0$N = as.factor(data0$N)
+
+```
+
+```{r}
+
+# Two-Way ANOVA
+model2way = lm(yield~N*block, data=data0)
+anova(model2way)
+
+```
+
+p \> 0.05, which means there is no significant evidence of interaction effect.
+
+```{r, fig.height = 3.5}
+  
+interaction.plot(data0$N,data0$block,data0$yield)
+interaction.plot(data0$block,data0$N,data0$yield)
+
+```
+
+Interaction plot also display parallel lines, indicating no interaction.
+
+So, we have to try the "additive" model:
+
+```{r}
+
+modeladd <- lm(yield ~ N + block, data = data0)
+anova(modeladd)
+
+```
+
+In both cases p \< 0.05, so both factors have a main effect in the "additive" model.
+
+```{r, fig.height = 3.5}
+
+# Diagnostics:
+par(mfrow=c(1,2)) 
+qqnorm(residuals(modeladd)); plot(fitted(modeladd),residuals(modeladd))
+
+```
+
+From QQPlot, we can tell that the curve more or less straight, so it is likely normal. Meanwhile, there is no significant pattern in the fitted plot, which is good and means the residual is independent and identical.
+
+-   **Was it sensible to include factor block into this model?** From the results showed in "additive" model, the p_value of block is 0.007095 \< 0.05, and the N is the first order in our model, so it makes sense to include the block.
+-   **Can we also apply the Friedman test for this situation?** No, because each block has more than one same value N, meanwhile, the treatments are not completely randomized.
+
+### Section d
+
+```{r}
+
+pairwiseP <- lm(yield ~ block*P + N + K, data = data0) 
+pairwiseK <- lm(yield ~ block*K + P + N, data = data0) 
+pairwiseN <- lm(yield ~ block*N + K + P, data = data0)
+
+```
+
+```{r}
+
+anova(pairwiseP); anova(pairwiseK); anova(pairwiseN)
+
+```
+
+No interaction effect for either of the three, thus we do an additive model:
+
+```{r}
+
+modeladd2 <- lm(yield ~ block + N + P + K, data = data0); anova(modeladd2)
+
+```
+
+p \< 0.05 for N and K, showing a main effect. p \> 0.05 for P, so we can conclude that there is no significant effect.
+
+**We conclude that the best model is the additive ANOVA model.** Additive ANOVA model provides an overall indication of the effects of each factor N, P, K and block. From the p values we can tell additive model are better than the pairwise model. Furthermore, the pairwise models only focus on the interaction between two factors at a time, lacking the control for others.
+
+### Section e
+
+```{r}
+model_d = lm(yield ~ block + N + K + P, data = data0)
+summary(model_d)
+```
+
+From the summary we can see block 3 is the best in all blocks, and N1 is better than N0, which means N treated is better, while P and K are prefered to be untreated. So, the best combination is **(3, 1, 0, 0)** for (block, N, P, K), leading the largest yield.
+
+### Section f
+
+```{r}
+
+library('MASS')
+library('lme4')
+data0 = npk
+
+model_mixed <- lmer(yield ~ N+P+K+(1|block),data=data0,REML=FALSE) 
+model_fixed <- lm(yield ~  N + P + K + block, data = data0)
+anova(model_mixed,model_fixed) 
+```
+
+The model comparison results are:
+
+-   AIC: The fixed effects model (AIC = 143.39) is lower than the mixed effects model (AIC = 151.03), suggesting better model fit.
+-   BIC: The fixed effects model (BIC = 155.17) is also lower, reinforcing the AIC results.
+-   Log-likelihood: The fixed effects model has a higher log-likelihood (-61.695 vs. -69.514), meaning it fits the data better.
+-   Chi-square test: χ² = 15.639, p = 0.003544 (significant at p \< 0.05), indicating that treating block as a fixed effect is more appropriate.
+
+The fixed effects model (lm(yield \~ block + N + P + K)) provides a better fit than the mixed effects model.
