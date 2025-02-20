@@ -1,0 +1,359 @@
+---
+title: "Assignment 1.2"
+author: "Xuening Tang, group5"
+date: "18th February 2025"
+output: pdf_document
+highlight: tango
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+*In order not to be bothered with rounding the numbers, set
+`options(digits=3)r options(digits=3)`.*
+
+## Exercise 2
+
+#### Section a
+
+To study the effect of County and Related on the variable Crops, we
+propose the following hypotheses:\
+$H_{AB}$ There is no interaction effect of *County and Related*.\
+$H_A$ There is no main effect of factor *County*.\
+$H_B$ There is no main effect of factor *Related*.
+
+```{r}
+library(dplyr)
+crop_data <- read.delim("crops.txt", sep = " ") # read the dataset
+
+cropframe = data.frame(
+  crops = crop_data$Crops, 
+  county = factor(crop_data$County),
+  related = factor(crop_data$Related)) # turn variables "county" and "related" into factors; store relevant variables to a new data frame
+
+cropframe <- cropframe %>% mutate(related = recode(related, 'yes' = '1', 'no' = '0')) # recode the "related" variable
+```
+
+```{r}
+cropframe # display the frame
+crops = cropframe$crops
+county = cropframe$county
+related = cropframe$related
+```
+
+Before conducting the ANOVA test, we first plotted two interaction plots
+to get a first glimpse of the potential interaction effect. Based on the
+two interaction plots, it seems there is little interaction effect, as
+the lines are parallel in general. We then conduct a two-way ANOVA to
+confirm our observation.
+
+```{r, fig.height=6, fig.width=6}
+interaction.plot(related,county,crops) # fix county
+interaction.plot(county,related,crops) # fix related
+```
+
+```{r}
+is.factor(county) # check if county and related are factors
+is.factor(related)
+```
+
+```{r}
+cropanov=lm(crops~county*related); anova(cropanov) # conduct the two-way ANOVA test
+summary(cropanov)
+```
+
+Result shows that there is no interaction effect between *Related* and
+*County* on *Crops*. None of the p values for *County*, *Crops* and
+*County:Related* are significant (p = 0.477; p = 0.527; p = 0.879). To
+make sure that this result is valid, we plot a Q-Q plot and residual
+plot. Based on the two plots, the assumption of normality is met: Q-Q
+plot gives a straight line in general, and the residuals display no
+pattern.
+
+```{r}
+par(mfrow=c(1,2))
+qqnorm(residuals(cropanov)); plot(fitted(cropanov),residuals(cropanov))
+```
+
+In the next step, we remove the interaction and apply an additive model.
+The code and results are shown below:
+
+```{r}
+cropanov2=lm(crops~county+related,data=cropframe); anova(cropanov2) # additive model
+summary(cropanov2)
+```
+
+The result of the additive model shows that neither of the factors has a
+significant main effect on Crops. The p-values are 0.4518 and 0.5126 for
+*County* and *Related* respectively, and are larger than the 0.05
+significance level in both cases. Therefore, we fail to reject none of
+our hypotheses. The normality assumption of this ANOVA test is also met
+based on the following Q-Q plot and residual plot:
+
+```{r}
+qqnorm(residuals(cropanov2)); plot(fitted(cropanov2),residuals(cropanov2))
+```
+
+Summary for the decisions to the null hypotheses:
+
+| Hypothesis | Decision   |
+|------------|------------|
+| $H_{AB}$   | not reject |
+| $H_{A}$    | not reject |
+| $H_{B}$    | not reject |
+
+The mathematical formula for a two-way ANOVA model is:
+
+$$
+Y_{ijk} = \mu_{ij} + e_{ijk}
+$$
+
+where
+
+$$
+\mu_{ij} = \mu + \alpha_i + \beta_j + \gamma_{ij}
+$$
+
+$\mu$ is the overall mean
+
+$\alpha_i$ is the main effect of level i of the factor *County*, i =
+1,2,3
+
+$\beta_j$ is the main effect of level j of the factor *Related*, j = 0,1
+
+$\gamma_ij$ is the interaction effect of levels i, j of factor *County*
+and *Related*, which is 0 in this case, since there is no significant
+interaction effect.
+
+We apply the model **cropanov2** for prediction.Therefore, the crops in
+*County 3* for which there is no related is:
+
+$$
+Crops = Intercept + County3 + Related0 = 6800.6 + 959.7 + 0 = 7760.3
+$$
+
+Therefore, the predicted value of the Crops is 7760.3.
+
+#### Section b
+
+We now add the variable *Size*. Since it is a numerical variable, it
+should be treated as an exploratory variable. We want to find out how
+*Size* influences the effect of *Related* or *County* on *Crops* in our
+model.
+
+(1) ANCOVA test: *Size \* County*
+
+$H_{AB}$ There is no interaction effect between *Size* and *County* on
+*Crops*
+
+We first get a glimpse of the distribution of size in different
+counties. It seems the distributions are different in different
+counties. We need to confirm our observation through a two-way ANCOVA
+model.
+
+```{r}
+size = crop_data$Size
+boxplot(size~county)
+```
+
+```{r}
+cropanov3=lm(crops~size*county,data=cropframe);anova(cropanov3)
+summary(cropanov3)
+```
+
+Based on the result, there is a significant interaction effect between
+*Size* and *County* on *Crops (p-value = 0.007)*. Summary of the ANOVA
+model shows that the effect mainly lies on the combination of
+*size:county 2 (p-value = 0.002)*, while size:county 3 is not
+significant (p-value = 0.157). Meanwhile, *county 2* also has a
+significant main effect under the influence of *Size* (p-value = 0.005).
+Q-Q plot and residual plot show that the assumption of normality is met
+in this case:
+
+```{r}
+qqnorm(residuals(cropanov3)); plot(fitted(cropanov3),residuals(cropanov3))
+```
+
+We **reject the null hypothesis** that there is no interaction effect
+between *Size* and *County*
+
+2.  ANCOVA test: *Size \* Related*
+
+$H_{AB}$ There is no interaction effect between *Size* and *Related* on
+*Crops*
+
+```{r}
+boxplot(size~related)
+```
+
+```{r}
+cropanov4=lm(crops~size*related,data=cropframe);anova(cropanov4)
+summary(cropanov4)
+```
+
+In the box plot, the distribution of *Size* does not differ much for
+different *Related* values. The interaction effect is also not
+significant according to the result of the ANCOVA test (p=0.331).
+Therefore, we **cannot reject the null hypothesis** in this case. The
+assumption of normality is met in general, though one can argue that
+there are more residuals on the lower fitted value side.
+
+```{r}
+qqnorm(residuals(cropanov4)); plot(fitted(cropanov4),residuals(cropanov4))
+```
+
+We then conduct two ANCOVA tests without interaction. We investigate the
+main effect of *Related* under the influence of *Size (cropanov5)*, and
+the main effect of *Size* under the influence of *Related (cropanov6).*
+
+```{r}
+cropanov5=lm(crops~size+related,data=cropframe);anova(cropanov5)# related on the second place
+summary(cropanov5)
+```
+
+```{r}
+cropanov6=lm(crops~related+size,data=cropframe);anova(cropanov6)# size on the second place
+summary(cropanov6)
+```
+
+Results show that *Related* does not have a significant main effect on
+*Crops* under the influence of *Size*, but *Size* has a significant main
+effect under the influence of *Related*. The normality assumption of
+both of the ANCOVA tests are met in general, although there seems to be
+more residuals in the area with a lower fitted score:
+
+```{r}
+qqnorm(residuals(cropanov5)); plot(fitted(cropanov5),residuals(cropanov5))
+```
+
+```{r}
+qqnorm(residuals(cropanov6)); plot(fitted(cropanov4),residuals(cropanov6))
+```
+
+Summary of this part:
+
+(1) There is a significant interaction effect between *Size* and
+    *County* on *Crops*. The combination *Size:County 2* is making the
+    most contribution.
+
+(2) No significant interaction effect is found for *Size \* Related*.
+
+(3) *Related* has no significant main effect on *Crops* under the
+    influence of *Size*, while *Size* has a significant main effect on
+    *Crops* under the influence of *Related*.
+
+#### Section c
+
+Based on our findings in part (b), we now include all factors (*Related*
+and *County*) and the exploratory variable (*Size*) together in the same
+model. We conduct a full ANCOVA test.
+
+$$
+Crops∼County+Related+Size+(County×Size)+(Related×Size)+(County×Related)
+$$
+
+We already know there is no interaction between *Related and Size*, and
+*County and Related*, so we drop the last two terms and get:
+
+$$
+Crops∼County+Related+Size+(County×Size)
+$$
+
+```{r}
+cropanov7=lm(crops ~ county+related+size+county*size, data = crop_data);anova(cropanov7)# size on the second place
+summary(cropanov7)
+```
+
+```{r}
+qqnorm(residuals(cropanov7)); plot(fitted(cropanov7),residuals(cropanov7))
+```
+
+Result of a full ANCOVA test also confirms what we found in section B in
+general. There is a significant main effect of variable *Size (p =
+0.000)* and *County 2 (p = 0.008)*. The interaction effect of
+*Size:County* is therefore also significant *(p = 0.012)*. Different
+from section B, *County* now also has a slightly significant main effect
+*(p = 0.016)*, when *County, Related* and *Size* are all included into
+the model. The assumption of normality is met according to the Q-Q plot
+and residual plot.
+
+Based on the summary, we can derive several conclusions:
+
+-   There is a significant difference between crop values in these three
+    counties. County 2 yields significantly fewer crops than County 1
+    (Estimate = -4214.050).
+
+-   Size has a significantly positive effect on crops, with a larger
+    land results in more crops (Estimate = 22.704).
+
+-   The positive effect of size is more prominent in County 2, as there
+    is a significant interaction effect. They yield a higher crops value
+    than Size: County1 (Estimate = 26.590).
+
+-   Value of crops does not depend on the relation of landlord and
+    tenant in all three counties, ,as the difference between different
+    relations is not statistically significant.
+
+The following table summarizes all ANOVA tests we've run in this
+exercise: (the ones with bold fonts are used for predictions)
+
+| Name          | Test Type            | R-model                                   |
+|-------------|--------------------|--------------------------------------------|
+| cropanov      | Two-way ANOVA model  | $ Crops∼(County×Related) $                |
+| **cropanov2** | Additive model       | $ Crops∼(County+Related) $                |
+| cropanov3     | Two-way ANCOVA model | $ Crops∼(County×Size) $                   |
+| cropanov4     | Two-way ANCOVA model | $ Crops∼(Size×Related) $                  |
+| cropanov5     | Additive model       | $ Crops∼(Size+Related) $                  |
+| cropanov6     | Additive model       | $ Crops∼(Related+Size) $                  |
+| **cropanov7** | Full ANCOVA model    | $Crops∼County+Related+Size+(County×Size)$ |
+
+#### Section d
+
+We will apply model **cropanov7** to make the prediction. The
+mathematical formula for a full ANCOVA is:
+
+$$ Y_{ijk} = \mu_{ij} + e_{ijk} $$
+
+where
+
+$$
+\mu_{ijk} = \mu + \alpha_i + \beta_j + \delta_k + \gamma_{ik}
+$$
+
+$\mu$ is the overall mean
+
+$\alpha_i$ is the main effect of level i of the factor *County*, i =
+1,2,3
+
+$\beta_j$ is the main effect of level j of the factor *Related*, j = 0,1
+
+$\delta_k$ is the main effect of the exploratory variable Size, k =
+1...n
+
+$\gamma_ik$ is the interaction effect of levels i, k of factor *County*
+and exploratory variable *Size*.
+
+According to this equation, the crops from County 2 of size 165, and
+related landlord and tenant is therefore:
+
+$$
+Crops = Intercept + County2 + Related1 + Size 165 + County2*Size165
+$$
+
+$$
+= 2461.014-4214.050-239.099+22.704*165+26.590*165 = 6141.378
+$$
+
+So the final crops value is 6141.378
+
+The error variance is given by:
+
+$$
+\hat{\sigma}^2 = \frac{\text{RSS}}{\text{df}}
+$$
+
+According to the summary of the **cropanov7,** we then have:$$
+\hat{\sigma}^2 = \frac{20277325}{23} = 881623
+$$
+
+The error variance is therefore 881623
