@@ -297,15 +297,15 @@ Based on the summary, we can derive several conclusions:
 The following table summarizes all ANOVA tests we've run in this
 exercise: (the ones with bold fonts are used for predictions)
 
-| Name          | Test Type            | R-model                                   |
-|-------------|--------------------|--------------------------------------------|
-| cropanov      | Two-way ANOVA model  | $ Crops∼(County×Related) $                |
-| **cropanov2** | Additive model       | $ Crops∼(County+Related) $                |
-| cropanov3     | Two-way ANCOVA model | $ Crops∼(County×Size) $                   |
-| cropanov4     | Two-way ANCOVA model | $ Crops∼(Size×Related) $                  |
-| cropanov5     | Additive model       | $ Crops∼(Size+Related) $                  |
-| cropanov6     | Additive model       | $ Crops∼(Related+Size) $                  |
-| **cropanov7** | Full ANCOVA model    | $Crops∼County+Related+Size+(County×Size)$ |
+| Name | Test Type | R-model |
+|----|----|----|
+| cropanov | Two-way ANOVA model | \$ Crops∼(County×Related) \$ |
+| **cropanov2** | Additive model | \$ Crops∼(County+Related) \$ |
+| cropanov3 | Two-way ANCOVA model | \$ Crops∼(County×Size) \$ |
+| cropanov4 | Two-way ANCOVA model | \$ Crops∼(Size×Related) \$ |
+| cropanov5 | Additive model | \$ Crops∼(Size+Related) \$ |
+| cropanov6 | Additive model | \$ Crops∼(Related+Size) \$ |
+| **cropanov7** | Full ANCOVA model | $Crops∼County+Related+Size+(County×Size)$ |
 
 #### Section d
 
