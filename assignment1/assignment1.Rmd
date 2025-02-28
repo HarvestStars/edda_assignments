@@ -414,13 +414,7 @@ knitr::kable(results_fraction, caption = "Fraction Test Results (H₀: fraction 
 
 #### Section a
 
-To study the effect of County and Related on the variable Crops, we
-propose the following hypotheses:\
-$H_{AB}$ There is no interaction effect of *County and Related*.\
-$H_A$ There is no main effect of factor *County*.\
-$H_B$ There is no main effect of factor *Related*.
-
-```{r}
+```{r, include=FALSE}
 library(dplyr)
 crop_data <- read.delim("crops.txt", sep = " ") # read the dataset
 
@@ -432,7 +426,7 @@ cropframe = data.frame(
 cropframe <- cropframe %>% mutate(related = recode(related, 'yes' = '1', 'no' = '0')) # recode the "related" variable
 ```
 
-```{r}
+```{r, include=FALSE}
 cropframe # display the frame
 crops = cropframe$crops
 county = cropframe$county
@@ -450,12 +444,12 @@ interaction.plot(related,county,crops) # fix county
 interaction.plot(county,related,crops) # fix related
 ```
 
-```{r}
+```{r, results='hide'}
 is.factor(county) # check if county and related are factors
 is.factor(related)
 ```
 
-```{r}
+```{r, results='hide'}
 cropanov=lm(crops~county*related); anova(cropanov) # conduct the two-way ANOVA test
 summary(cropanov)
 ```
@@ -476,7 +470,7 @@ qqnorm(residuals(cropanov)); plot(fitted(cropanov),residuals(cropanov))
 In the next step, we remove the interaction and apply an additive model.
 The code and results are shown below:
 
-```{r}
+```{r, results='hide'}
 cropanov2=lm(crops~county+related,data=cropframe); anova(cropanov2) # additive model
 summary(cropanov2)
 ```
@@ -534,27 +528,12 @@ Therefore, the predicted value of the Crops is 7760.3.
 
 #### Section b
 
-We now add the variable *Size*. Since it is a numerical variable, it
-should be treated as an exploratory variable. We want to find out how
-*Size* influences the effect of *Related* or *County* on *Crops* in our
-model.
-
-(1) ANCOVA test: *Size \* County*
-
-$H_{AB}$ There is no interaction effect between *Size* and *County* on
-*Crops*
-
-We first get a glimpse of the distribution of size in different
-counties. It seems the distributions are different in different
-counties. We need to confirm our observation through a two-way ANCOVA
-model.
-
-```{r}
+```{r, results='hide'}
 size = crop_data$Size
 boxplot(size~county)
 ```
 
-```{r}
+```{r, results='hide'}
 cropanov3=lm(crops~size*county,data=cropframe);anova(cropanov3)
 summary(cropanov3)
 ```
@@ -584,7 +563,7 @@ $H_{AB}$ There is no interaction effect between *Size* and *Related* on
 boxplot(size~related)
 ```
 
-```{r}
+```{r, results='hide'}
 cropanov4=lm(crops~size*related,data=cropframe);anova(cropanov4)
 summary(cropanov4)
 ```
@@ -604,12 +583,12 @@ We then conduct two ANCOVA tests without interaction. We investigate the
 main effect of *Related* under the influence of *Size (cropanov5)*, and
 the main effect of *Size* under the influence of *Related (cropanov6).*
 
-```{r}
+```{r, results='hide'}
 cropanov5=lm(crops~size+related,data=cropframe);anova(cropanov5)# related on the second place
 summary(cropanov5)
 ```
 
-```{r}
+```{r, results='hide'}
 cropanov6=lm(crops~related+size,data=cropframe);anova(cropanov6)# size on the second place
 summary(cropanov6)
 ```
@@ -642,21 +621,6 @@ Summary of this part:
 
 #### Section c
 
-Based on our findings in part (b), we now include all factors (*Related*
-and *County*) and the exploratory variable (*Size*) together in the same
-model. We conduct a full ANCOVA test.
-
-$$
-Crops∼County+Related+Size+(County×Size)+(Related×Size)+(County×Related)
-$$
-
-We already know there is no interaction between *Related and Size*, and
-*County and Related*, so we drop the last two terms and get:
-
-$$
-Crops∼County+Related+Size+(County×Size)
-$$
-
 ```{r}
 cropanov7=lm(crops ~ county+related+size+county*size, data = crop_data);anova(cropanov7)# size on the second place
 summary(cropanov7)
@@ -675,36 +639,6 @@ from section B, *County* now also has a slightly significant main effect
 the model. The assumption of normality is met according to the Q-Q plot
 and residual plot.
 
-Based on the summary, we can derive several conclusions:
-
--   There is a significant difference between crop values in these three
-    counties. County 2 yields significantly fewer crops than County 1
-    (Estimate = -4214.050).
-
--   Size has a significantly positive effect on crops, with a larger
-    land results in more crops (Estimate = 22.704).
-
--   The positive effect of size is more prominent in County 2, as there
-    is a significant interaction effect. They yield a higher crops value
-    than Size: County1 (Estimate = 26.590).
-
--   Value of crops does not depend on the relation of landlord and
-    tenant in all three counties, ,as the difference between different
-    relations is not statistically significant.
-
-The following table summarizes all ANOVA tests we've run in this
-exercise: (the ones with bold fonts are used for predictions)
-
-| Name | Test Type | R-model |
-|----|----|----|
-| cropanov | Two-way ANOVA model | \$ Crops∼(County×Related) \$ |
-| **cropanov2** | Additive model | \$ Crops∼(County+Related) \$ |
-| cropanov3 | Two-way ANCOVA model | \$ Crops∼(County×Size) \$ |
-| cropanov4 | Two-way ANCOVA model | \$ Crops∼(Size×Related) \$ |
-| cropanov5 | Additive model | \$ Crops∼(Size+Related) \$ |
-| cropanov6 | Additive model | \$ Crops∼(Related+Size) \$ |
-| **cropanov7** | Full ANCOVA model | $Crops∼County+Related+Size+(County×Size)$ |
-
 #### Section d
 
 We will apply model **cropanov7** to make the prediction. The
@@ -712,34 +646,11 @@ mathematical formula for a full ANCOVA is:
 
 $$ Y_{ijk} = \mu_{ij} + e_{ijk} $$
 
-where
-
-$$
-\mu_{ijk} = \mu + \alpha_i + \beta_j + \delta_k + \gamma_{ik}
-$$
-
-$\mu$ is the overall mean
-
-$\alpha_i$ is the main effect of level i of the factor *County*, i =
-1,2,3
-
-$\beta_j$ is the main effect of level j of the factor *Related*, j = 0,1
-
-$\delta_k$ is the main effect of the exploratory variable Size, k =
-1...n
-
-$\gamma_ik$ is the interaction effect of levels i, k of factor *County*
-and exploratory variable *Size*.
-
 According to this equation, the crops from County 2 of size 165, and
 related landlord and tenant is therefore:
 
 $$
 Crops = Intercept + County2 + Related1 + Size 165 + County2*Size165
-$$
-
-$$
-= 2461.014-4214.050-239.099+22.704*165+26.590*165 = 6141.378
 $$
 
 So the final crops value is 6141.378

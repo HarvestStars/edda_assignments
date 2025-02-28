@@ -1,0 +1,108 @@
+---
+title: " Experimental Design and Data Analysis - Assignment 2"
+author: "Group 11 - Björn van der Haas, Deividas Aksomaitis, Nur Başak Özer"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(Matrix)
+```
+
+## Exercise 2: Military coups
+
+### Section a
+
+```{r}
+
+coups <- read.table("coups.txt", header = TRUE)
+coups$pollib <- as.factor(coups$pollib) # transform into factor
+fit <- glm(miltcoup ~ oligarchy + pollib + parties + pctvote + popn + size +
+             numelec + numregim, data = coups, family = "poisson")
+summary(fit)
+
+
+```
+
+We can tell from the results that the factors *oligarchy*, *pollib* and *parties* have significant effects on the output of military coups, while other variables not.
+
+### Section b
+
+Use the step down approach:
+
+```{r}
+
+summary(glm(miltcoup ~ oligarchy + pollib + parties + pctvote + popn + size +
+              numelec + numregim, family=poisson, data=coups))
+
+```
+
+Here the *numelec* has the biggest p-value "0.67054". Hence we remove it from the model and proceed again:
+
+```{r}
+
+summary(glm(miltcoup ~ oligarchy + pollib + parties + pctvote + popn + size +
+              numregim, family=poisson, data=coups))
+
+```
+
+Then We see that variable *numregim* has the biggest p-value. Hence we remove it from the model and proceed next:
+
+```{r}
+
+summary(glm(miltcoup ~ oligarchy + pollib + parties + pctvote + popn + size,
+            family=poisson, data=coups))
+
+```
+
+We see that variable *size* has the biggest p-value and not significant (\< 0.05), again:
+
+```{r}
+
+summary(glm(miltcoup ~ oligarchy + pollib + parties + pctvote + popn, 
+            family=poisson, data=coups))
+
+```
+
+Remove *popn*:
+
+```{r}
+
+summary(glm(miltcoup ~ oligarchy + pollib + parties + pctvote,
+            family=poisson,data=coups))
+
+```
+
+Remove *pctvote*:
+
+```{r}
+
+summary(glm(miltcoup ~ oligarchy + pollib + parties, family=poisson, data=coups)) # final model
+
+```
+
+After removing factors above, We can see that the left variables are significant. As a result, the adjusted model includes the variables: *oligarchy*, *pollib* and *parties*. Note that this is the exact same result that we obtained in Section a.
+
+### Section c
+
+```{r}
+
+is.factor(coups$pollib)
+oligarchy_mean = mean(coups$oligarchy)
+parties_mean = mean(coups$parties)
+coup_new = data.frame(pollib=c("0", "1", "2"), oligarchy=c(oligarchy_mean, oligarchy_mean, oligarchy_mean), 
+                      parties=c(parties_mean, parties_mean, parties_mean))
+model_predict = glm(miltcoup ~ oligarchy + pollib + parties, family=poisson, data=coups)
+predict(model_predict, coup_new, type = "response")
+
+```
+The model predicts that as political liberalization increases, the expected number of coups decreases. Specifically, a country with low political liberalization (pollib = 0) has the highest predicted number of coups (2.91), while a country with moderate political liberalization (pollib = 1) experiences fewer coups (1.77), and a country with high political liberalization (pollib = 2) has the lowest predicted coup frequency (0.96).
+
+This result aligns with theoretical expectations: authoritarian regimes (low political liberalization) often face higher risks of military coups due to power struggles and repression, whereas democratic or more politically open systems tend to have stronger institutions that reduce the likelihood of coups.
+
+However, this model assumes that other factors, such as oligarchy and party system characteristics, remain constant, which may not fully capture the complexity of real-world political dynamics. Further analysis could explore interactions between these variables or consider alternative regression models to account for overdispersion in the data.
+
+

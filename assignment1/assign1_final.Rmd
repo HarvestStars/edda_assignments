@@ -1,0 +1,1296 @@
+---
+title: "Experimental Design and Data Analysis - Assignment 1"
+author: "Group 5 - Ivana Malčić, Xuening Tang, Xiaoxuan Zhang"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+#Sys.setenv(RSTUDIO_PANDOC = "C:/Program Files/Pandoc")
+knitr::opts_chunk$set(echo = TRUE)
+library(Matrix)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(moments)
+library('MASS')
+options(digits = 3)
+```
+
+## Exercise 1: Cholesterol
+
+**a)** In this first section, both normality and variable correlation
+are explored using relevant plots and metrics. Firstly, the bell-like
+shape of the histograms indicates that the data is normally distributed.
+
+```{r, echo=TRUE}
+cholesterol_data <- read.delim("cholesterol.txt", sep = " ")
+par(mfrow = c(1,2))
+
+#histograms for 'Before' and 'After8weeks'
+hist(cholesterol_data$Before, 
+     main = "Histogram: Before", 
+     xlab = "Cholesterol (Before)", 
+     col = "lightblue", 
+     border = "black")
+
+hist(cholesterol_data$After8weeks, 
+     main = "Histogram: After8weeks", 
+     xlab = "Cholesterol (After 8 weeks)", 
+     col = "lightcoral", 
+     border = "black")
+```
+
+The previous finding is further confirmed by the following QQ-plots
+where the data points seem relatively close to the reference line, again
+signaling normality.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE, fig.align="center", fig.show="hold"}
+par(mfrow = c(1,2))
+#QQ-plots for 'Before'
+qqnorm(cholesterol_data$Before, main = "QQ Plot: Before")
+qqline(cholesterol_data$Before, col = "red")
+
+#QQ-plots for 'After8weeks'
+qqnorm(cholesterol_data$After8weeks, main = "QQ Plot: After8weeks")
+qqline(cholesterol_data$After8weeks, col = "red")
+```
+
+Additional data exploration gives us further insight; the close mean and
+median signify symetric distribution, a feature which is also a common
+attribute of normality. Moreover, the skewness for both variables tells
+us that the left tail is slightly longer (distribution skewed to the
+left). Finally, kurtosis of 2.5 and 2.27 indicates a peaked distribution
+with less outliers and a more or less uniform distribution.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+#calculates descriptive statistics
+descriptive_stats <- data.frame(
+  Variable = colnames(cholesterol_data),
+  Mean = sapply(cholesterol_data, mean, na.rm = TRUE),
+  Median = sapply(cholesterol_data, median, na.rm = TRUE),
+  Skewness = sapply(cholesterol_data, skewness, na.rm = TRUE),
+  Kurtosis = sapply(cholesterol_data, kurtosis, na.rm = TRUE)
+)
+#removes the row names to avoid duplication
+row.names(descriptive_stats) <- NULL
+
+#creates a table using kable
+kable(descriptive_stats, caption = "Descriptive Statistics for Cholesterol Levels", align = "c", digits = 2)
+```
+
+After normality assesment, we turn to look at whether the two variables
+are correlated. For this we first utilize a simple scatterplot shown
+below which exhibits strong positive correlation visible by the densly
+clustered data points around the rising regression line.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.align="center", fig.show="hold"}
+par(mfrow = c(1,1))
+
+#simple scatterplot which plots correlation between the two variables
+plot(cholesterol_data$Before, cholesterol_data$After8weeks,
+     main = "Scatter Plot: Before vs After8weeks",
+     xlab = "Cholesterol (Before)",
+     ylab = "Cholesterol (After 8 Weeks)",
+     pch = 16, col = "blue")
+abline(lm(After8weeks ~ Before, data = cholesterol_data), col = "red", lwd = 2)
+```
+
+Then, Pearson´s test is employed - the correlation coefficient of 0.991
+indicates a strong and positive linear relationship between the two
+variables. Furthermore, the small p-value (\<0.001) suggests this
+relationship is statistically significant, and therefore we can reject
+the null hypothesis of no correlation.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#pearson´s correlation test to quantify level of correlation
+correlation_test <- cor.test(cholesterol_data$Before, cholesterol_data$After8weeks, method = "pearson")
+
+correlation_results <- data.frame(
+  Statistic = c("Correlation Coefficient", "P-value", "Confidence Interval"),
+  Value = c(
+    round(correlation_test$estimate, 3),  
+    round(correlation_test$p.value, 3),   
+    paste(round(correlation_test$conf.int[1], 3), "to", round(correlation_test$conf.int[2], 3))  # Round confidence interval
+)
+
+)
+#presenting the results in a table
+kable(correlation_results, caption = "Pearson Correlation Test Results", align = "l", col.names = c("Statistic", "Value"))
+```
+
+**b)** Now, our goal is to establish whether the low-fat margarine diet
+had any effect on cholesterol by utilizing 2 relevant test metrics.
+Since our data is paired, we first utilize a paired t-test. The large
+t-statistic and small p-value (p \< 0.001) provide strong evidence
+against the null hypothesis of no difference. Additionally, the
+confidence interval suggests that the mean cholesterol level after 8
+weekes lies somewhere between 0.54 and 0.718 with 95% confidence.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#perform a paired t-test
+t_test_result <- t.test(cholesterol_data$Before, cholesterol_data$After8weeks, paired = TRUE)
+
+#extracting the key results and rounding them to 3 decimal places (the global function did not work here,
+#so I manually specified the rounding)
+t_test_results <- data.frame(
+  Statistic = c("t-statistic", "Degrees of Freedom", "P-value", "Confidence Interval"),
+  Value = c(
+    round(t_test_result$statistic, 3),  
+    round(t_test_result$parameter, 3),  
+    round(t_test_result$p.value, 3),    
+    paste(round(t_test_result$conf.int[1], 3), "to", round(t_test_result$conf.int[2], 3))  # Round confidence interval
+  )
+)
+#displays the results as a table
+kable(t_test_results, caption = "Paired t-Test Results", align = "l", col.names = c("Statistic", "Value"))
+```
+
+Since our data are paired and normally distributed, the Mann-Whitney U
+test is not applicable in this scenario. However, we can apply the
+permutation test which is useful because it works well with small data
+volumes. The following permutation table reveals a similar trend as
+previously discussed with a statistically significant (p\<0.001) average
+decrease in cholesterol levels by 0.629 units after the 8 week
+intervention.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Observed mean difference
+observed_diff <- mean(cholesterol_data$Before - cholesterol_data$After8weeks)
+
+# Number of permutations
+n_permutations <- 10000
+
+# Initialize a vector to store permutation results
+permuted_diffs <- numeric(n_permutations)
+
+# Perform permutations
+set.seed(123)  # For reproducibility
+for (i in 1:n_permutations) {
+  # Randomly flip the signs of the differences
+  signs <- sample(c(-1, 1), size = nrow(cholesterol_data), replace = TRUE)
+  permuted_diff <- mean((cholesterol_data$Before - cholesterol_data$After8weeks) * signs)
+  permuted_diffs[i] <- permuted_diff
+}
+
+# Calculate the p-value
+p_value <- mean(abs(permuted_diffs) >= abs(observed_diff))
+
+# Create a data frame for the results
+results_table <- data.frame(
+  Statistic = c("Observed Mean Difference", "Permutation Test P-value"),
+  Value = c(observed_diff, p_value)
+)
+
+# Display the results as a table
+kable(results_table, caption = "Permutation Test Results", align = "l", col.names = c("Statistic", "Value"))
+```
+
+**c)** Next, we are constructing a 97% CI and 97% bootstrapped CI, as
+opposed to our previously used 95% CI. As visible from *Table 5*, we can
+be 97% confident our true population parameter is encompased between the
+ranges of [5.16, 6.39] for normal CI and [5.23, 6.32] for the
+bootstrapped CI.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+x <- cholesterol_data$After8weeks
+
+#calculates the sample mean, standard deviation, and sample size
+n <- length(x)
+x_bar <- mean(x)
+s <- sd(x)
+
+
+##97% CI.
+
+#finding the critical t-value for a 97% CI
+alpha <- 0.03
+t_critical <- qt(1 - alpha / 2, df = n - 1)
+
+#calculates the 97% CI based on normality
+ci_lower <- x_bar - t_critical * (s / sqrt(n))
+ci_upper <- x_bar + t_critical * (s / sqrt(n))
+
+
+##Bootstrapped 97% CI.
+
+n_bootstrap <- 10000
+bootstrap_means <- numeric(n_bootstrap)
+
+set.seed(123)  
+for (i in 1:n_bootstrap) {
+  bootstrap_sample <- sample(x, size = n, replace = TRUE)
+  bootstrap_means[i] <- mean(bootstrap_sample)
+}
+
+ci_bootstrap <- quantile(bootstrap_means, probs = c(alpha / 2, 1 - alpha / 2))
+
+#creates a table for the results
+result_table <- data.frame(
+  Method = c("Normality (t-distribution)", "Bootstrap"),
+  Lower_Bound = c(ci_lower, ci_bootstrap[1]),
+  Upper_Bound = c(ci_upper, ci_bootstrap[2])
+)
+
+kable(result_table, caption = "97% Confidence Intervals for Mean")
+```
+
+**d)** Additionally, we use bootstrapping to come up with a 97%
+confidence interval for the maximum statistic for various candidate
+values of θ, helping us reject or not reject the hypothesis that the
+data follow a Uniform[3,θ] distribution. *Table 6* provides us with
+plausible candidate values for which we cannot reject the Null
+hypothesis. Kolmogorov-Smirnov test can also be applied in this case to
+test whether the data follows a uniform distribution.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+x <- cholesterol_data$After8weeks
+
+#test statistic
+T_obs <- max(x)
+
+#theta values to test
+theta_values <- seq(3, 12, by = 0.1)
+
+rejected <- logical(length(theta_values))
+
+#bootstraped test for each theta
+set.seed(123)  
+n_bootstrap <- 10000  
+
+for (i in seq_along(theta_values)) {
+  theta <- theta_values[i]
+  
+  #simulates bootstrap samples under H0
+  T_bootstrap <- numeric(n_bootstrap)
+  for (j in 1:n_bootstrap) {
+    bootstrap_sample <- runif(length(x), min = 3, max = theta)
+    T_bootstrap[j] <- max(bootstrap_sample)
+  }
+  
+  #checks if T_obs falls within the 97% of the bootstrap distribution
+  ci <- quantile(T_bootstrap, probs = c(0.015, 0.985))
+  rejected[i] <- T_obs < ci[1] || T_obs > ci[2]
+}
+
+#theta values for which H0 is not rejected
+theta_not_rejected <- theta_values[!rejected]
+
+results_table <- data.frame(
+  Theta = theta_not_rejected,
+  Lower_Bound = sapply(theta_not_rejected, function(theta) 
+    quantile(replicate(n_bootstrap, max(runif(length(x), 3, theta))), probs = 0.015)),
+  Upper_Bound = sapply(theta_not_rejected, function(theta) 
+    quantile(replicate(n_bootstrap, max(runif(length(x), 3, theta))), probs = 0.985))
+)
+
+knitr::kable(results_table, 
+             caption = "Non-Rejected Theta Values",
+             align = "c",
+             col.names = c("Theta", "Lower Bound", "Upper Bound"))
+```
+
+Kolmogorov-Smirnov test can also be applied in this case to test whether
+the data follows a uniform distribution.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+p_values <- numeric(length(theta_values))
+
+#performs KS test for each theta
+for (i in seq_along(theta_values)) {
+  theta <- theta_values[i]
+  
+  #theoretical uniform distribution
+  uniform_cdf <- function(x) {
+    ifelse(x < 3, 0, ifelse(x > theta, 1, (x - 3) / (theta - 3)))
+  }
+  
+  #performs the KS test
+  ks_test <- ks.test(x, uniform_cdf)
+  p_values[i] <- ks_test$p.value
+}
+
+#identifies theta values for which H0 is not rejected (p-value > 0.03)
+theta_not_rejected_ks <- theta_values[p_values > 0.03]
+
+#performing KS test for each theta
+for (i in seq_along(theta_values)) {
+  theta <- theta_values[i]
+  uniform_cdf <- function(x) {
+    ifelse(x < 3, 0, ifelse(x > theta, 1, (x - 3) / (theta - 3)))
+  }
+  ks_test <- ks.test(x, uniform_cdf)
+  p_values[i] <- ks_test$p.value
+}
+
+#identifies non-rejected theta values (p-value > 0.03)
+theta_not_rejected_ks <- theta_values[p_values > 0.03]
+
+#creates a table
+results_ks <- data.frame(
+  Theta = theta_not_rejected_ks,
+  P_Value = p_values[p_values > 0.03]
+)
+results_ks$P_Value <- round(results_ks$P_Value, 3)
+
+knitr::kable(results_ks, 
+             caption = "Theta Values with Non-Rejected KS Test",
+             align = "c",
+             col.names = c("Theta", "P-Value"))
+
+```
+
+**e)** Finally, we are testing the following Null hypothesis: *Null
+hypothesis (*$H_0$): The median cholesterol level after 8 weeks is 6.
+With the results presented below we can conclude there is not enough
+statistical evidence to conclude that the median cholesterol level after
+8 weeks is less than 6. While 61.1% of the sample is below 6, this
+deviation could easily be due to random variation given the sample size
+(p\>0.1).
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+x <- cholesterol_data$After8weeks
+n <- length(x)
+n_below6 <- sum(x < 6)
+
+#binomial test: H₀ (telling us the median = 6), P(x < 6) = 0.5
+median_test <- binom.test(n_below6, n, p = 0.5, alternative = "greater")
+
+#creates a table summarizing the results 
+results_median <- data.frame(
+  Statistic = c("Sample Size", "Number < 6", "Observed Proportion", "p-value", "95% CI"),
+  Value = c(
+    n,
+    n_below6,
+    round(n_below6 / n, 3),
+    round(median_test$p.value, 3),
+    paste(round(median_test$conf.int[1], 3), "to", round(median_test$conf.int[2], 3))
+  )
+)
+
+knitr::kable(results_median, caption = "Median Test Results (H₀: median = 6)")
+```
+
+Subsequently, our second Null hypothesis goes as following: *Null
+hypothesis (*$H_0$): the fraction of cholesterol levels below 4.5 is at
+most 0.25. Similarly, we also cannot reject this hypothesis because of
+the very high p-value (p\>0.1) and a wide CI.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+n_below4.5 <- sum(x < 4.5)
+
+#binomial test: H₀ tells us that the fraction below 4.5 = 0.25
+fraction_test <- binom.test(n_below4.5, n, p = 0.25, alternative = "greater")
+
+#creates a table
+results_fraction <- data.frame(
+  Statistic = c("Sample Size", "Number < 4.5", "Observed Proportion", "p-value", "95% CI"),
+  Value = c(
+    n,
+    n_below4.5,
+    sprintf('%.3f', n_below4.5 / n),
+    sprintf('%.3f', fraction_test$p.value),
+    paste0(sprintf('%.3f', fraction_test$conf.int[1]), " to ", sprintf('%.3f', fraction_test$conf.int[2]))
+  )
+)
+
+knitr::kable(results_fraction, caption = "Fraction Test Results (H₀: fraction below 4.5 is 25%)")
+```
+
+## Exercise 2
+
+**a)** To study the effect of **County** and **Related** on the variable
+*Crops*, we propose the following hypotheses:
+
+-   $H_{AB}$: There is no interaction effect of *County* and *Related*.
+-   $H_A$: There is no main effect of factor *County*.
+-   $H_B$: There is no main effect of factor *Related*.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+crop_data <- read.delim("crops.txt", sep = " ")
+
+# turn variables "county" and "related" into factors; store relevant variables to a new data frame
+cropframe = data.frame(
+  crops = crop_data$Crops, 
+  county = factor(crop_data$County),
+  related = factor(crop_data$Related),
+  size = crop_data$Size 
+  ) 
+# recode the "related" variable
+cropframe <- cropframe %>% 
+ mutate(related = factor(recode(related, 'yes' = '1', 'no' = '0')))
+```
+
+Before conducting the ANOVA test, we first plot two interaction plots to
+see potential interaction effect. Based on the left plot we can see
+counties 1 and 2 cross lines in the beginning signaling slight
+interaction when not *Related*, but this effect is diminished when they
+are *Related* as the disparity grows larger. In the right plot both
+lines are parallel, meaning the effect of counties on crop yields does
+not really depend on being related or not.
+
+```{r, fig.height=4, fig.width=8, echo=FALSE, message=FALSE, warning=FALSE}
+# Set custom margins and spacing
+par(mfrow = c(1, 2), mar = c(5, 4, 4, 6))  # Increased right margin
+
+# Plot 1: Related vs County
+with(cropframe, {
+  interaction.plot(
+    x.factor = related,
+    trace.factor = county,
+    response = crops,
+    main = "Related vs County",
+    xlab = "Related (0=No, 1=Yes)",
+    ylab = "Crops Yield",
+    col = c("#1b9e77", "#d95f02", "#7570b3"),
+    lwd = 2,
+    pch = 19,
+    type = "b",
+    legend = FALSE,  # Crucial: disable default legend
+    cex.main = 1.2,
+    cex.lab = 1.1,
+    cex.axis = 0.9
+  )
+  
+  # Manual legend placement
+  legend("right", 
+         inset = c(-0.25, 0),  # Nudge left into plot area
+         xpd = TRUE,  # Allow drawing in margin area
+         legend = paste("County", levels(county)),
+         col = c("#1b9e77", "#d95f02", "#7570b3"),
+         lwd = 2,
+         pch = 19,
+         title = "County",
+         cex = 0.8)
+})
+
+# Plot 2: County vs Related
+with(cropframe, {
+  interaction.plot(
+    x.factor = county,
+    trace.factor = related,
+    response = crops,
+    main = "County vs Related",
+    xlab = "County",
+    ylab = "Crops Yield",
+    col = c("#e41a1c", "#377eb8"),
+    lwd = 2,
+    pch = 17,
+    type = "b",
+    legend = FALSE,  # Disable default legend
+    cex.main = 1.2,
+    cex.lab = 1.1,
+    cex.axis = 0.9
+  )
+  
+  # Manual legend placement
+  legend("right",
+         inset = c(-0.25, 0),
+         xpd = TRUE,
+         legend = c("No (0)", "Yes (1)"),
+         col = c("#e41a1c", "#377eb8"),
+         lwd = 2,
+         pch = 17,
+         title = "Related",
+         cex = 0.8)
+})
+```
+
+As visible in the ANOVA table below, results show that there is no
+interaction effect between *Related* and *County* on *Crops* and none of
+the p-values for *County*, *Crops* and *County:Related* are significant
+(p = 0.477; p = 0.527; p = 0.879).
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#fitting the model
+cropanov <- lm(crops ~ county * related, data = cropframe)  # Use cropframe instead of crop_data
+
+#creates the ANOVA table and converts row names into a column,
+#then removes the row names so they don't appear twice.
+anova_table <- anova(cropanov)
+anova_table_df <- data.frame(
+  Term = rownames(anova_table),
+  Sum_Sq = anova_table$`Sum Sq`,
+  Df = anova_table$Df,
+  F_Value = anova_table$`F value`,
+  Pr_F = anova_table$`Pr(>F)`,
+  row.names = NULL
+)
+
+#creates the model summary (coefficients) table similarly to the ANOVA table.
+summary_table <- coef(summary(cropanov))
+summary_table_df <- data.frame(
+  Term = rownames(summary_table),
+  Estimate = summary_table[, 1],
+  Std_Error = summary_table[, 2],
+  t_Value = summary_table[, 3],
+  Pr_t = summary_table[, 4],
+  row.names = NULL
+)
+
+anova_table_df[-1] <- lapply(anova_table_df[-1], round, 3)
+summary_table_df[-1] <- lapply(summary_table_df[-1], round, 3)
+
+knitr::kable(
+  anova_table_df,
+  caption = "Two-Way ANOVA Results",
+  align = "c",
+  col.names = c("Term", "Sum of Squares", "Df", "F Value", "Pr(>F)")
+)
+
+knitr::kable(
+  summary_table_df,
+  caption = "Linear Model Coefficients",
+  align = "c",
+  col.names = c("Term", "Estimate", "Std. Error", "t Value", "Pr(>|t|)")
+)
+```
+
+Next, we remove the interaction and apply an additive model. The result
+of the additive model shows that neither of the factors has a
+significant main effect on *Crops*. The p-values of 0.4518 and 0.5126
+for *County* and *Related* respectively, are larger than the 0.05
+significance level so we fail to reject our hypotheses.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#fits the additive model
+cropanov2 <- lm(crops ~ county + related, data = cropframe)
+#performs ANOVA
+anova_results <- anova(cropanov2)
+
+#performs model summary
+summary_results <- summary(cropanov2)
+
+#converts ANOVA results to a data frame
+anova_table_df <- data.frame(
+  Term = rownames(anova_results),  
+  Sum_Sq = round(anova_results$`Sum Sq`, 3),
+  Df = anova_results$Df,
+  F_Value = round(anova_results$`F value`, 3),
+  Pr_F = round(anova_results$`Pr(>F)`, 3),
+  row.names = NULL  # Remove row names
+)
+
+#creates summary table with clean term names
+summary_table_df <- data.frame(
+  Term = c("Intercept", "County 2", "County 3", "Related 1"),
+  Estimate = round(summary_results$coefficients[, "Estimate"], 3),
+  Std_Error = round(summary_results$coefficients[, "Std. Error"], 3),
+  t_Value = round(summary_results$coefficients[, "t value"], 3),
+  Pr_t = round(summary_results$coefficients[, "Pr(>|t|)"], 3),
+  row.names = NULL  # Remove row names
+)
+
+#displays ANOVA table
+knitr::kable(
+  anova_table_df,
+  caption = "ANOVA Results for Additive Model",
+  align = "c",
+  col.names = c("Term", "Sum of Squares", "Df", "F Value", "Pr(>F)"),
+  row.names = FALSE  # Ensure row names are not displayed
+)
+
+#displays summary table
+knitr::kable(
+  summary_table_df,
+  caption = "Summary of Coefficients for Additive Model",
+  align = "c",
+  col.names = c("Term", "Estimate", "Std. Error", "t Value", "Pr(>|t|)"),
+  row.names = FALSE 
+)
+```
+
+The two-way ANOVA model is:
+
+$$
+Y_{ijk} = \mu_{ij} + e_{ijk}
+$$
+
+where
+
+$$
+\mu_{ij} = \mu + \alpha_i + \beta_j + \gamma_{ij}
+$$
+
+-   $\mu$ is the overall mean
+-   $\alpha_i$ is the main effect of *County* ($i = 1, 2, 3$)
+-   $\beta_j$ is the main effect of *Related* ($j = 0, 1$)
+-   $\gamma_{ij}$ is the interaction effect, which is 0 due to no
+    significant interaction.
+
+Using the model **cropanov2**, the predicted *Crops* for County 3 with
+no relation (Related = 0) is:
+
+$$
+Crops = 6800.6 + 959.7 + 0 = 7760.3
+$$
+
+Thus, the predicted value is 7760.3.
+
+**b)** Next, we add the variable *Size* into the analysis with the aim
+to find out how it influences the effect of *Related* or *County* on
+*Crops* in our model.
+
+***(A)*** ANCOVA test: *Size \* County* First, by getting a gimpse in
+distributions for different counties, we conclude they are different.
+Thus, we need to confirm our observation through a two-way ANCOVA model.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+par(mfrow = c(1, 1))
+
+crops = cropframe$crops
+county = cropframe$county
+size = cropframe$size
+
+#boxplot of Size by County
+boxplot(size ~ county,
+        main = "Boxplot of Size by County", 
+        xlab = "County", 
+        ylab = "Size", 
+        col = c("lightblue", "lightgreen", "lightcoral"), 
+        border = "darkgray", 
+        notch = TRUE, 
+        outline = FALSE, 
+        las = 1)  
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#fits the model
+cropanov3 <- lm(crops ~ size * county, data = cropframe)
+
+#ANOVA table
+anova_table3 <- anova(cropanov3)
+anova_table3_df <- data.frame(
+  Term = rownames(anova_table3),
+  Sum_Sq = round(anova_table3$`Sum Sq`, 3),
+  Df = anova_table3$Df,
+  F_Value = round(anova_table3$`F value`, 3),
+  Pr_F = round(anova_table3$`Pr(>F)`, 3),
+  row.names = NULL 
+)
+
+#summary table for coefficients
+summary_table3 <- summary(cropanov3)$coefficients
+summary_table3_df <- data.frame(
+  Term = c("Intercept", "Size", "County 2", "County 3", 
+           "Size × County 2", "Size × County 3"),  
+  Estimate = round(summary_table3[, "Estimate"], 3),
+  Std_Error = round(summary_table3[, "Std. Error"], 3),
+  t_Value = round(summary_table3[, "t value"], 3),
+  Pr_t = round(summary_table3[, "Pr(>|t|)"], 3),
+  row.names = NULL  
+)
+
+knitr::kable(
+  anova_table3_df, 
+  caption = "ANOVA Table for Size and County Interaction", 
+  align = "c",
+  row.names = FALSE  
+)
+
+knitr::kable(
+  summary_table3_df, 
+  caption = "Model Summary for Size and County Interaction", 
+  align = "c",
+  row.names = FALSE  
+)
+```
+
+Based on the result, there is a significant interaction effect between
+*Size* and *County* on *Crops* (p-value = 0.007). Summary of the ANOVA
+model shows that the effect mainly lies on the combination of
+*size:county 2* (p-value = 0.002), while *size:county 3* is not
+significant (p-value = 0.157). Meanwhile, *county 2* also has a
+significant main effect under the influence of *Size* (p-value = 0.005).
+
+***(B)*** ANCOVA *Size \* Related* In the box plot, the distribution of
+*Size* does not differ much for different *Related* values. The
+interaction effect is also not significant according to the result of
+the ANCOVA test (p=0.331). Therefore, we **cannot reject the null
+hypothesis** in this case.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+size = crop_data$Size
+related = crop_data$Related
+
+#boxplot for Size across Related 
+boxplot(size ~ related, data = crop_data,
+        main = "Boxplot of Size by Related Status",
+        xlab = "Related Status",
+        ylab = "Size",
+        col = c("skyblue", "salmon"),
+        border = "black",  
+        notch = TRUE, 
+        pch = 16)  
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#fits the model
+cropanov4 <- lm(crops ~ size * related, data = cropframe)
+
+#performs ANOVA and summarizes the model
+anova_results <- anova(cropanov4)
+summary_results <- summary(cropanov4)
+
+#converts ANOVA results to a data frame
+anova_table_df <- data.frame(
+  Term = rownames(anova_results),
+  Sum_Sq = round(anova_results$`Sum Sq`, 3),
+  Df = anova_results$Df,
+  F_Value = round(anova_results$`F value`, 3),
+  Pr_F = round(anova_results$`Pr(>F)`, 3),
+  row.names = NULL
+)
+
+#summary table with coefficients
+summary_table_df <- data.frame(
+  Term = rownames(summary_results$coefficients),
+  Estimate = round(summary_results$coefficients[, "Estimate"], 3),
+  Std_Error = round(summary_results$coefficients[, "Std. Error"], 3),
+  t_Value = round(summary_results$coefficients[, "t value"], 3),
+  Pr_t = round(summary_results$coefficients[, "Pr(>|t|)"], 3),
+  row.names = NULL
+)
+
+knitr::kable(
+  anova_table_df,
+  caption = "ANOVA Results for Model with Size and Related",
+  align = "c",
+  col.names = c("Term", "Sum of Squares", "Df", "F Value", "Pr(>F)"),
+  row.names = FALSE
+)
+
+knitr::kable(
+  summary_table_df,
+  caption = "Model Coefficients for Size and Related",
+  align = "c",
+  col.names = c("Term", "Estimate", "Std. Error", "t Value", "Pr(>|t|)"),
+  row.names = FALSE
+)
+```
+
+***(C)*** Lastly, we conduct two ANCOVA tests without interaction. We
+investigate the main effect of *Related* under the influence of *Size
+(cropanov5)*, and the main effect of *Size* under the influence of
+*Related (cropanov6).* Results show that *Related* does not have a
+significant main effect on *Crops* under the influence of *Size*, but
+*Size* has a significant main effect under the influence of *Related*.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#fits the first model (Size + Related)
+cropanov5 <- lm(crops ~ size + related, data = cropframe)
+
+#performs ANOVA and summarize the model for cropanov5
+anova_results5 <- anova(cropanov5)
+summary_results5 <- summary(cropanov5)
+
+#converts the ANOVA results to a data frame for cropanov5
+anova_table_df5 <- data.frame(
+  Term = rownames(anova_results5),
+  Sum_Sq = round(anova_results5$`Sum Sq`, 3),
+  Df = anova_results5$Df,
+  F_Value = round(anova_results5$`F value`, 3),
+  Pr_F = round(anova_results5$`Pr(>F)`, 3),
+  row.names = NULL
+)
+
+#creating summary table with coefficients for cropanov5
+summary_table_df5 <- data.frame(
+  Term = rownames(summary_results5$coefficients),
+  Estimate = round(summary_results5$coefficients[, "Estimate"], 3),
+  Std_Error = round(summary_results5$coefficients[, "Std. Error"], 3),
+  t_Value = round(summary_results5$coefficients[, "t value"], 3),
+  Pr_t = round(summary_results5$coefficients[, "Pr(>|t|)"], 3),
+  row.names = NULL
+)
+
+knitr::kable(
+  anova_table_df5,
+  caption = "ANOVA Results for Model with Size and Related (Size first)",
+  align = "c",
+  col.names = c("Term", "Sum of Squares", "Df", "F Value", "Pr(>F)"),
+  row.names = FALSE
+)
+
+knitr::kable(
+  summary_table_df5,
+  caption = "Model Coefficients for Size and Related (Size first)",
+  align = "c",
+  col.names = c("Term", "Estimate", "Std. Error", "t Value", "Pr(>|t|)"),
+  row.names = FALSE
+)
+
+#fits the second model (Related + Size)
+cropanov6 <- lm(crops ~ related + size, data = cropframe)
+
+#performs ANOVA and summarize the model for cropanov6
+anova_results6 <- anova(cropanov6)
+summary_results6 <- summary(cropanov6)
+
+#converts the ANOVA results to a data frame for cropanov6
+anova_table_df6 <- data.frame(
+  Term = rownames(anova_results6),
+  Sum_Sq = round(anova_results6$`Sum Sq`, 3),
+  Df = anova_results6$Df,
+  F_Value = round(anova_results6$`F value`, 3),
+  Pr_F = round(anova_results6$`Pr(>F)`, 3),
+  row.names = NULL
+)
+
+summary_table_df6 <- data.frame(
+  Term = rownames(summary_results6$coefficients),
+  Estimate = round(summary_results6$coefficients[, "Estimate"], 3),
+  Std_Error = round(summary_results6$coefficients[, "Std. Error"], 3),
+  t_Value = round(summary_results6$coefficients[, "t value"], 3),
+  Pr_t = round(summary_results6$coefficients[, "Pr(>|t|)"], 3),
+  row.names = NULL
+)
+
+knitr::kable(
+  anova_table_df6,
+  caption = "ANOVA Results for Model with Related and Size (Related first)",
+  align = "c",
+  col.names = c("Term", "Sum of Squares", "Df", "F Value", "Pr(>F)"),
+  row.names = FALSE
+)
+
+knitr::kable(
+  summary_table_df6,
+  caption = "Model Coefficients for Related and Size (Related first)",
+  align = "c",
+  col.names = c("Term", "Estimate", "Std. Error", "t Value", "Pr(>|t|)"),
+  row.names = FALSE
+)
+```
+
+**c)** Based on our findings in part (b), we now include all factors
+(*Related* and *County*) and the exploratory variable (*Size*) together
+in the same model, and subsequently conduct a full ANCOVA test. The full
+ANCOVA test also confirms what we found in section B in general. There
+is a significant main effect of variable *Size (p =0.000)* and *County 2
+(p = 0.008)*. The interaction effect of *Size:County* is also
+significant *(p = 0.012)*. Different from section B, *County* now also
+has a slightly significant main effect *(p = 0.016)*, when *County,
+Related* and *Size* are all included into the model. Based on the
+summary, we can derive several conclusions:
+
+-   There is a significant difference between crop values in these three
+    counties. County 2 yields significantly fewer crops than County 1
+    (Estimate = -4214.050).
+
+-   Size has a significantly positive effect on crops, with a larger
+    land results in more crops (Estimate = 22.704).
+
+-   The positive effect of size is more prominent in County 2, as there
+    is a significant interaction effect. They yield a higher crops value
+    than Size: County1 (Estimate = 26.590).
+
+-   Value of crops does not depend on the relation of landlord and
+    tenant in all three counties, ,as the difference between different
+    relations is not statistically significant.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#fits the model with County, Related, Size, and County:Size interaction
+cropanov7 <- lm(crops ~ county + related + size + county * size, data = crop_data)
+
+#performs ANOVA and summarize the model for cropanov7
+anova_results7 <- anova(cropanov7)
+summary_results7 <- summary(cropanov7)
+
+anova_table_df7 <- data.frame(
+  Term = rownames(anova_results7),
+  Sum_Sq = round(anova_results7$`Sum Sq`, 3),
+  Df = anova_results7$Df,
+  F_Value = round(anova_results7$`F value`, 3),
+  Pr_F = round(anova_results7$`Pr(>F)`, 3),
+  row.names = NULL
+)
+
+#creates a summary table with coefficients for cropanov7
+summary_table_df7 <- data.frame(
+  Term = rownames(summary_results7$coefficients),
+  Estimate = round(summary_results7$coefficients[, "Estimate"], 3),
+  Std_Error = round(summary_results7$coefficients[, "Std. Error"], 3),
+  t_Value = round(summary_results7$coefficients[, "t value"], 3),
+  Pr_t = round(summary_results7$coefficients[, "Pr(>|t|)"], 3),
+  row.names = NULL
+)
+
+knitr::kable(
+  anova_table_df7,
+  caption = "ANOVA Results for Model with County, Related, Size, and County:Size Interaction",
+  align = "c",
+  col.names = c("Term", "Sum of Squares", "Df", "F Value", "Pr(>F)"),
+  row.names = FALSE
+)
+
+knitr::kable(
+  summary_table_df7,
+  caption = "Model Coefficients for County, Related, Size, and County:Size Interaction",
+  align = "c",
+  col.names = c("Term", "Estimate", "Std. Error", "t Value", "Pr(>|t|)"),
+  row.names = FALSE
+)
+```
+
+**d)** We will apply model **cropanov7** to predict crops for a farm
+from County 2 of size 165, with related landlord and tenant. To do this
+we first have to know the mathematical formula for a full ANCOVA which
+is:
+
+$$ Y_{ijk} = \mu_{ij} + e_{ijk} $$
+
+where
+
+$$
+\mu_{ijk} = \mu + \alpha_i + \beta_j + \delta_k + \gamma_{ik}
+$$
+
+$\mu$ is the overall mean
+
+$\alpha_i$ is the main effect of level i of the factor *County*, i =
+1,2,3
+
+$\beta_j$ is the main effect of level j of the factor *Related*, j = 0,1
+
+$\delta_k$ is the main effect of the exploratory variable Size, k =
+1...n
+
+$\gamma_ik$ is the interaction effect of levels i, k of factor *County*
+and exploratory variable *Size*.
+
+According to this equation, the crops from County 2 of size 165, and
+related landlord and tenant is:
+
+$$
+Crops = Intercept + County2 + Related1 + Size 165 + County2*Size165
+$$
+
+$$
+= 2461.014-4214.050-239.099+22.704*165+26.590*165 = 6141.378
+$$
+
+So the final crops value is 6141.378
+
+The error variance is given by:
+
+$$
+\hat{\sigma}^2 = \frac{\text{RSS}}{\text{df}}
+$$
+
+According to the summary of the **cropanov7,** we then have:$$
+\hat{\sigma}^2 = \frac{20277325}{23} = 881623
+$$
+
+The final estimated error variance is therefore 881623.
+
+## Exercise 3: Yield of peas
+
+**a)** For this exercise, we first present the R-code for the
+randomization process to distribute soil additives over plots in such a
+way that each soil additive is received exactly by two plots within each
+block.
+
+```{r, message=FALSE, warning=FALSE}
+set.seed(123)
+
+#initial params
+I <- 6  # blocks
+J <- 4  # plots per block
+
+#initial data frame
+randomized_design <- data.frame(
+  block = rep(1:I, each = J),
+  plot = rep(1:J, times = I)
+)
+
+# for each block b, put (N, P, K) on each 2 plots randomly
+for (b in 1:I) {
+  plots <- sample(1:J, J, replace = FALSE)  # randomly reorder plots in each block
+  
+  # put N in the header 2 plots
+  randomized_design$N[randomized_design$block == b] <- 
+    ifelse(plots %in% plots[1:2], 1, 0)
+  
+  # randomly put P in 2 plots
+  randomized_design$P[randomized_design$block == b] <- 
+    ifelse(plots %in% sample(plots, 2), 1, 0)
+  
+  # randomly put K in 2 plots
+  randomized_design$K[randomized_design$block == b] <- 
+    ifelse(plots %in% sample(plots, 2), 1, 0)
+}
+
+# Optionally print the randomized design
+# print(randomized_design)
+```
+
+**b)** Then, the following plot illustrates that the average yields for
+soil treated by N are higher than for untreated soil. What's more, each
+block and treatment tend to have a similar change. Meanwhile, we have
+assigned treatments randomly to each soil within a block, which reduces
+the variation and gets more precise results.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=3, fig.align="center"}
+library(ggplot2)
+
+# Summarise the npk data to get average yield per block by nitrogen treatment
+npk_summary <- npk %>%
+  group_by(block, N) %>% 
+  summarise(mean_yield = mean(yield), .groups = 'drop')
+
+# Ensure block is a factor for proper plotting
+npk_summary$block <- as.factor(npk_summary$block)
+
+#creates a bar plot using ggplot2
+ggplot(npk_summary, aes(x = block, y = mean_yield, fill = factor(N))) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8)) +
+  labs(title = "Average Yield per Block by Nitrogen Treatment",
+       x = "Block",
+       y = "Average Yield (pounds per plot)",
+       fill = "Nitrogen Treatment") +
+  scale_fill_manual(values = c("0" = "skyblue", "1" = "salmon"),
+                    labels = c("No Nitrogen", "Nitrogen")) +
+  theme_minimal() +
+  theme(text = element_text(size = 12))
+```
+
+**c)** For this part of the report we conduct a full two-way ANOVA with
+the response variable yield and the two factors; block and N. As visible
+from the results tables, p\> 0.05, meaning there is no significant
+evidence of interaction effect.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+data0 <- npk
+data0$block <- as.factor(data0$block)
+data0$N <- as.factor(data0$N)
+
+#runs the Two-Way ANOVA (Nitrogen, Block, and their interaction)
+model2way <- lm(yield ~ N * block, data = data0)
+anova_results <- anova(model2way)
+
+anova_df2way <- data.frame(
+  Term = rownames(anova_results),
+  `Df` = anova_results$Df,
+  `Sum Sq` = anova_results$`Sum Sq`,
+  `Mean Sq` = anova_results$`Mean Sq`,
+  `F Value` = anova_results$`F value`,
+  `Pr(>F)` = anova_results$`Pr(>F)`
+)
+
+knitr::kable(
+  anova_df2way,
+  caption = "Two-Way ANOVA Results for Yield by Nitrogen and Block (With Interaction)",
+  align = "c",
+  col.names = c("Term", "Df", "Sum Sq", "Mean Sq", "F Value", "Pr(>F)"),
+  row.names = FALSE
+)
+```
+
+Now we turn to generating an additive model. Here in both cases p\<0.05,
+so both factors have a main effect. From the results showed in table
+below, the p_value of block is 0.007095 \< 0.05, and the N is the first
+order in our model, so it makes sense to include the block. The Fridman
+test cannot be applied in this situation because each block has more
+than one same value N, meanwhile, the treatments are not completely
+randomized.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#linear model for Nitrogen and Block without interaction
+modeladd <- lm(yield ~ N + block, data = data0)
+
+#ANOVA test for the model
+anova_results_add <- anova(modeladd)
+
+anova_df <- data.frame(
+  Term = rownames(anova_results_add),
+  `Df` = anova_results_add$Df,
+  `Sum Sq` = anova_results_add$`Sum Sq`,
+  `Mean Sq` = anova_results_add$`Mean Sq`,
+  `F Value` = anova_results_add$`F value`,
+  `Pr(>F)` = anova_results_add$`Pr(>F)`
+)
+
+knitr::kable(
+  anova_df,
+  caption = "ANOVA Results for Yield by Nitrogen and Block (No Interaction)",
+  align = "c",
+  col.names = c("Term", "Df", "Sum Sq", "Mean Sq", "F Value", "Pr(>F)"),
+  row.names = FALSE
+)
+```
+
+**d)** We want to explore interaction terms now, so first we do
+interactions with a pairwise model. From the results we see there is no
+interaction effect for either of the three.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+#fits the models for pairwise comparisons
+pairwiseP <- lm(yield ~ block * P + N + K, data = data0)
+pairwiseK <- lm(yield ~ block * K + P + N, data = data0)
+pairwiseN <- lm(yield ~ block * N + K + P, data = data0)
+
+#runs the ANOVA for each model
+anovaP <- anova(pairwiseP)
+anovaK <- anova(pairwiseK)
+anovaN <- anova(pairwiseN)
+
+#creating data frames for each ANOVA result
+anova_dfP <- data.frame(
+  Term = rownames(anovaP),
+  `Df` = anovaP$Df,
+  `Sum Sq` = anovaP$`Sum Sq`,
+  `Mean Sq` = anovaP$`Mean Sq`,
+  `F Value` = anovaP$`F value`,
+  `Pr(>F)` = anovaP$`Pr(>F)`
+)
+
+anova_dfK <- data.frame(
+  Term = rownames(anovaK),
+  `Df` = anovaK$Df,
+  `Sum Sq` = anovaK$`Sum Sq`,
+  `Mean Sq` = anovaK$`Mean Sq`,
+  `F Value` = anovaK$`F value`,
+  `Pr(>F)` = anovaK$`Pr(>F)`
+)
+
+anova_dfN <- data.frame(
+  Term = rownames(anovaN),
+  `Df` = anovaN$Df,
+  `Sum Sq` = anovaN$`Sum Sq`,
+  `Mean Sq` = anovaN$`Mean Sq`,
+  `F Value` = anovaN$`F value`,
+  `Pr(>F)` = anovaN$`Pr(>F)`
+)
+
+knitr::kable(
+  anova_dfP,
+  caption = "ANOVA Results for Pairwise P Model (block*P + N + K)",
+  align = "c",
+  col.names = c("Term", "Df", "Sum Sq", "Mean Sq", "F Value", "Pr(>F)"),
+  row.names = FALSE
+)
+
+knitr::kable(
+  anova_dfK,
+  caption = "ANOVA Results for Pairwise K Model (block*K + P + N)",
+  align = "c",
+  col.names = c("Term", "Df", "Sum Sq", "Mean Sq", "F Value", "Pr(>F)"),
+  row.names = FALSE
+)
+
+knitr::kable(
+  anova_dfN,
+  caption = "ANOVA Results for Pairwise N Model (block*N + K + P)",
+  align = "c",
+  col.names = c("Term", "Df", "Sum Sq", "Mean Sq", "F Value", "Pr(>F)"),
+  row.names = FALSE
+)
+```
+
+Then, we turn to an additive model. Here we notice p\<0.05 for N and K,
+showing a main effect. However, for P p\>0.05, so we can conclude that
+there is no significant effect. **We conclude that the best model is the
+additive ANOVA model.** Additive ANOVA model provides an overall
+indication of the effects of each factor N, P, K and block. From the p
+values we can tell additive model are better than the pairwise model.
+Furthermore, the pairwise models only focus on the interaction between
+two factors at a time, lacking the control for others.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Create the additive model
+modeladd2 <- lm(yield ~ block + N + P + K, data = data0)
+
+# Run ANOVA on the model
+anova_results_add2 <- anova(modeladd2)
+
+# Present the ANOVA results in a nicely formatted table
+knitr::kable(
+  anova_results_add2,
+  caption = "ANOVA Results for Additive Model (Yield ~ block + N + P + K)",
+  align = "c",
+  digits = 3,
+  col.names = c("Term", "Df", "Sum Sq", "Mean Sq", "F value", "Pr(>F)"),
+  row.names = TRUE
+)
+```
+
+**e)** From our resulting model in part d), we further investigate how
+the involved factors influence yield. From the summary we can see block
+3 is the best in all blocks, and N1 is better than N0, which means N
+treated is better, while P and K are prefered to be untreated. So, the
+best combination is **(3, 1, 0, 0)** for (block, N, P, K), leading to
+the largest yield.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Fit the model
+model_d <- lm(yield ~ block + N + K + P, data = data0)
+
+# Get the summary of the model
+model_d_summary <- summary(model_d)
+
+# Extract the coefficients and related statistics
+coef_table <- as.data.frame(model_d_summary$coefficients)
+
+# Present the results in a nicely formatted table
+knitr::kable(
+  coef_table,
+  caption = "Model Coefficients for Yield ~ block + N + K + P",
+  align = "c",
+  digits = 3,
+  col.names = c("Estimate", "Std. Error", "t Value", "Pr(>|t|)"),
+  row.names = TRUE
+)
+```
+
+**f)** In conclusion, we want to perform a mixed eﬀects analysis for our
+model from task d), modeling the block variable as a random eﬀect. Then
+we compare our results to the results found by using the fixed eﬀects
+model. These are our findings: - AIC: The fixed effects model (AIC =
+143.39) is lower than the mixed effects model (AIC = 151.03), suggesting
+better model fit. - BIC: The fixed effects model (BIC = 155.17) is also
+lower, reinforcing the AIC results. - Log-likelihood: The fixed effects
+model has a higher log-likelihood (-61.695 vs. -69.514), meaning it fits
+the data better. - Chi-square test: χ² = 15.639, p = 0.003544
+(significant at p \< 0.05), indicating that treating block as a fixed
+effect is more appropriate.
+
+The fixed effects model (lm(yield \~ block + N + P + K)) provides a
+better fit than the mixed effects model.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(nlme)
+# Fit a mixed-effects model using nlme
+model_mixed_nlme <- lme(fixed = yield ~ N + P + K, random = ~ 1 | block, data = npk)
+
+# Fit the fixed-effects model using lm (same as before)
+model_fixed <- lm(yield ~ N + P + K + block, data = npk)
+
+# Run the ANOVA comparison
+anova_results <- anova(model_mixed_nlme, model_fixed)
+
+colnames(anova_results) <- c("Call", "Model", "Df", "AIC", "BIC", "LogLik", "Test", "L.Ratio", "p-value")
+
+# Create a well-formatted table using knitr::kable()
+knitr::kable(
+  anova_results,
+  caption = "ANOVA Comparison of Mixed Model (with block as random effect) and Fixed Model",
+  format = "markdown",  # Use markdown for better formatting
+  align = c("l", "c", "c", "c", "c", "c", "c", "c", "c"),  # Align columns for better readability
+  digits = 3,
+  row.names = FALSE  # Don't show row names
+)
+
+```

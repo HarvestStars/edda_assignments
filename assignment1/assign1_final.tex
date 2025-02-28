@@ -1,0 +1,1226 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Experimental Design and Data Analysis - Assignment 1},
+  pdfauthor={Group 5 - Ivana Malčić, Xuening Tang, Xiaoxuan Zhang},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Experimental Design and Data Analysis - Assignment 1}
+\author{Group 5 - Ivana Malčić, Xuening Tang, Xiaoxuan Zhang}
+\date{2025-02-23}
+
+\begin{document}
+\maketitle
+
+\subsection{Exercise 1: Cholesterol}\label{exercise-1-cholesterol}
+
+\textbf{a)} In this first section, both normality and variable
+correlation are explored using relevant plots and metrics. Firstly, the
+bell-like shape of the histograms indicates that the data is normally
+distributed.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cholesterol\_data }\OtherTok{\textless{}{-}} \FunctionTok{read.delim}\NormalTok{(}\StringTok{"cholesterol.txt"}\NormalTok{, }\AttributeTok{sep =} \StringTok{" "}\NormalTok{)}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+
+\CommentTok{\#histograms for \textquotesingle{}Before\textquotesingle{} and \textquotesingle{}After8weeks\textquotesingle{}}
+\FunctionTok{hist}\NormalTok{(cholesterol\_data}\SpecialCharTok{$}\NormalTok{Before, }
+     \AttributeTok{main =} \StringTok{"Histogram: Before"}\NormalTok{, }
+     \AttributeTok{xlab =} \StringTok{"Cholesterol (Before)"}\NormalTok{, }
+     \AttributeTok{col =} \StringTok{"lightblue"}\NormalTok{, }
+     \AttributeTok{border =} \StringTok{"black"}\NormalTok{)}
+
+\FunctionTok{hist}\NormalTok{(cholesterol\_data}\SpecialCharTok{$}\NormalTok{After8weeks, }
+     \AttributeTok{main =} \StringTok{"Histogram: After8weeks"}\NormalTok{, }
+     \AttributeTok{xlab =} \StringTok{"Cholesterol (After 8 weeks)"}\NormalTok{, }
+     \AttributeTok{col =} \StringTok{"lightcoral"}\NormalTok{, }
+     \AttributeTok{border =} \StringTok{"black"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assign1_final_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+The previous finding is further confirmed by the following QQ-plots
+where the data points seem relatively close to the reference line, again
+signaling normality.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\CommentTok{\#QQ{-}plots for \textquotesingle{}Before\textquotesingle{}}
+\FunctionTok{qqnorm}\NormalTok{(cholesterol\_data}\SpecialCharTok{$}\NormalTok{Before, }\AttributeTok{main =} \StringTok{"QQ Plot: Before"}\NormalTok{)}
+\FunctionTok{qqline}\NormalTok{(cholesterol\_data}\SpecialCharTok{$}\NormalTok{Before, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{)}
+
+\CommentTok{\#QQ{-}plots for \textquotesingle{}After8weeks\textquotesingle{}}
+\FunctionTok{qqnorm}\NormalTok{(cholesterol\_data}\SpecialCharTok{$}\NormalTok{After8weeks, }\AttributeTok{main =} \StringTok{"QQ Plot: After8weeks"}\NormalTok{)}
+\FunctionTok{qqline}\NormalTok{(cholesterol\_data}\SpecialCharTok{$}\NormalTok{After8weeks, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{center}\includegraphics{assign1_final_files/figure-latex/unnamed-chunk-2-1} \end{center}
+
+Additional data exploration gives us further insight; the close mean and
+median signify symetric distribution, a feature which is also a common
+attribute of normality. Moreover, the skewness for both variables tells
+us that the left tail is slightly longer (distribution skewed to the
+left). Finally, kurtosis of 2.5 and 2.27 indicates a peaked distribution
+with less outliers and a more or less uniform distribution.
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Descriptive Statistics for Cholesterol Levels}\tabularnewline
+\toprule\noalign{}
+Variable & Mean & Median & Skewness & Kurtosis \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Variable & Mean & Median & Skewness & Kurtosis \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Before & 6.41 & 6.50 & -0.28 & 2.50 \\
+After8weeks & 5.78 & 5.73 & -0.17 & 2.27 \\
+\end{longtable}
+
+After normality assesment, we turn to look at whether the two variables
+are correlated. For this we first utilize a simple scatterplot shown
+below which exhibits strong positive correlation visible by the densly
+clustered data points around the rising regression line.
+
+\begin{center}\includegraphics{assign1_final_files/figure-latex/unnamed-chunk-4-1} \end{center}
+
+Then, Pearson´s test is employed - the correlation coefficient of 0.991
+indicates a strong and positive linear relationship between the two
+variables. Furthermore, the small p-value (\textless0.001) suggests this
+relationship is statistically significant, and therefore we can reject
+the null hypothesis of no correlation.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Pearson Correlation Test Results}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Correlation Coefficient & 0.991 \\
+P-value & 0 \\
+Confidence Interval & 0.975 to 0.997 \\
+\end{longtable}
+
+\textbf{b)} Now, our goal is to establish whether the low-fat margarine
+diet had any effect on cholesterol by utilizing 2 relevant test metrics.
+Since our data is paired, we first utilize a paired t-test. The large
+t-statistic and small p-value (p \textless{} 0.001) provide strong
+evidence against the null hypothesis of no difference. Additionally, the
+confidence interval suggests that the mean cholesterol level after 8
+weekes lies somewhere between 0.54 and 0.718 with 95\% confidence.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Paired t-Test Results}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+t-statistic & 14.946 \\
+Degrees of Freedom & 17 \\
+P-value & 0 \\
+Confidence Interval & 0.54 to 0.718 \\
+\end{longtable}
+
+Since our data are paired and normally distributed, the Mann-Whitney U
+test is not applicable in this scenario. However, we can apply the
+permutation test which is useful because it works well with small data
+volumes. The following permutation table reveals a similar trend as
+previously discussed with a statistically significant (p\textless0.001)
+average decrease in cholesterol levels by 0.629 units after the 8 week
+intervention.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Permutation Test Results}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Observed Mean Difference & 0.629 \\
+Permutation Test P-value & 0.000 \\
+\end{longtable}
+
+\textbf{c)} Next, we are constructing a 97\% CI and 97\% bootstrapped
+CI, as opposed to our previously used 95\% CI. As visible from
+\emph{Table 5}, we can be 97\% confident our true population parameter
+is encompased between the ranges of {[}5.16, 6.39{]} for normal CI and
+{[}5.23, 6.32{]} for the bootstrapped CI.
+
+\begin{longtable}[]{@{}llrr@{}}
+\caption{97\% Confidence Intervals for Mean}\tabularnewline
+\toprule\noalign{}
+& Method & Lower\_Bound & Upper\_Bound \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Method & Lower\_Bound & Upper\_Bound \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+& Normality (t-distribution) & 5.16 & 6.39 \\
+1.5\% & Bootstrap & 5.23 & 6.32 \\
+\end{longtable}
+
+\textbf{d)} Additionally, we use bootstrapping to come up with a 97\%
+confidence interval for the maximum statistic for various candidate
+values of θ, helping us reject or not reject the hypothesis that the
+data follow a Uniform{[}3,θ{]} distribution. \emph{Table 6} provides us
+with plausible candidate values for which we cannot reject the Null
+hypothesis. Kolmogorov-Smirnov test can also be applied in this case to
+test whether the data follows a uniform distribution.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Non-Rejected Theta Values}\tabularnewline
+\toprule\noalign{}
+Theta & Lower Bound & Upper Bound \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Theta & Lower Bound & Upper Bound \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+7.7 & 6.72 & 7.70 \\
+7.8 & 6.81 & 7.80 \\
+7.9 & 6.90 & 7.90 \\
+8.0 & 6.98 & 8.00 \\
+8.1 & 7.07 & 8.10 \\
+8.2 & 7.13 & 8.20 \\
+8.3 & 7.20 & 8.30 \\
+8.4 & 7.29 & 8.39 \\
+8.5 & 7.36 & 8.50 \\
+8.6 & 7.45 & 8.60 \\
+8.7 & 7.52 & 8.70 \\
+8.8 & 7.57 & 8.79 \\
+8.9 & 7.68 & 8.90 \\
+\end{longtable}
+
+Kolmogorov-Smirnov test can also be applied in this case to test whether
+the data follows a uniform distribution.
+
+\begin{longtable}[]{@{}cc@{}}
+\caption{Theta Values with Non-Rejected KS Test}\tabularnewline
+\toprule\noalign{}
+Theta & P-Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Theta & P-Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+7.0 & 0.038 \\
+7.1 & 0.053 \\
+7.2 & 0.071 \\
+7.3 & 0.092 \\
+7.4 & 0.117 \\
+7.5 & 0.146 \\
+7.6 & 0.179 \\
+7.7 & 0.216 \\
+7.8 & 0.256 \\
+7.9 & 0.299 \\
+8.0 & 0.345 \\
+8.1 & 0.394 \\
+8.2 & 0.444 \\
+8.3 & 0.495 \\
+8.4 & 0.509 \\
+8.5 & 0.419 \\
+8.6 & 0.342 \\
+8.7 & 0.277 \\
+8.8 & 0.223 \\
+8.9 & 0.179 \\
+9.0 & 0.143 \\
+9.1 & 0.114 \\
+9.2 & 0.091 \\
+9.3 & 0.072 \\
+9.4 & 0.057 \\
+9.5 & 0.045 \\
+9.6 & 0.036 \\
+\end{longtable}
+
+\textbf{e)} Finally, we are testing the following Null hypothesis:
+\emph{Null hypothesis (}\(H_0\)): The median cholesterol level after 8
+weeks is 6. With the results presented below we can conclude there is
+not enough statistical evidence to conclude that the median cholesterol
+level after 8 weeks is less than 6. While 61.1\% of the sample is below
+6, this deviation could easily be due to random variation given the
+sample size (p\textgreater0.1).
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Median Test Results (H₀: median = 6)}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sample Size & 18 \\
+Number \textless{} 6 & 11 \\
+Observed Proportion & 0.611 \\
+p-value & 0.24 \\
+95\% CI & 0.392 to 1 \\
+\end{longtable}
+
+Subsequently, our second Null hypothesis goes as following: \emph{Null
+hypothesis (}\(H_0\)): the fraction of cholesterol levels below 4.5 is
+at most 0.25. Similarly, we also cannot reject this hypothesis because
+of the very high p-value (p\textgreater0.1) and a wide CI.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Fraction Test Results (H₀: fraction below 4.5 is
+25\%)}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sample Size & 18 \\
+Number \textless{} 4.5 & 3 \\
+Observed Proportion & 0.167 \\
+p-value & 0.865 \\
+95\% CI & 0.047 to 1.000 \\
+\end{longtable}
+
+\subsection{Exercise 2}\label{exercise-2}
+
+\textbf{a)} To study the effect of \textbf{County} and \textbf{Related}
+on the variable \emph{Crops}, we propose the following hypotheses:
+
+\begin{itemize}
+\tightlist
+\item
+  \(H_{AB}\): There is no interaction effect of \emph{County} and
+  \emph{Related}.
+\item
+  \(H_A\): There is no main effect of factor \emph{County}.
+\item
+  \(H_B\): There is no main effect of factor \emph{Related}.
+\end{itemize}
+
+Before conducting the ANOVA test, we first plot two interaction plots to
+see potential interaction effect. Based on the left plot we can see
+counties 1 and 2 cross lines in the beginning signaling slight
+interaction when not \emph{Related}, but this effect is diminished when
+they are \emph{Related} as the disparity grows larger. In the right plot
+both lines are parallel, meaning the effect of counties on crop yields
+does not really depend on being related or not.
+
+\includegraphics{assign1_final_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+As visible in the ANOVA table below, results show that there is no
+interaction effect between \emph{Related} and \emph{County} on
+\emph{Crops} and none of the p-values for \emph{County}, \emph{Crops}
+and \emph{County:Related} are significant (p = 0.477; p = 0.527; p =
+0.879).
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Two-Way ANOVA Results}\tabularnewline
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+county & 8.84e+06 & 2 & 0.764 & 0.477 \\
+related & 2.38e+06 & 1 & 0.411 & 0.527 \\
+county:related & 1.50e+06 & 2 & 0.129 & 0.879 \\
+Residuals & 1.39e+08 & 24 & NA & NA \\
+\end{longtable}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2609}}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1449}}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1739}}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.1304}}
+  >{\centering\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2899}}@{}}
+\caption{Linear Model Coefficients}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Std. Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+t Value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Pr(\textgreater\textbar t\textbar)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Std. Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+t Value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Pr(\textgreater\textbar t\textbar)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 6700 & 1076 & 6.230 & 0.000 \\
+county2 & 93 & 1521 & 0.061 & 0.952 \\
+county3 & 851 & 1521 & 0.560 & 0.581 \\
+related1 & -362 & 1521 & -0.238 & 0.814 \\
+county2:related1 & -821 & 2151 & -0.381 & 0.706 \\
+county3:related1 & 217 & 2151 & 0.101 & 0.920 \\
+\end{longtable}
+
+Next, we remove the interaction and apply an additive model. The result
+of the additive model shows that neither of the factors has a
+significant main effect on \emph{Crops}. The p-values of 0.4518 and
+0.5126 for \emph{County} and \emph{Related} respectively, are larger
+than the 0.05 significance level so we fail to reject our hypotheses.
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{ANOVA Results for Additive Model}\tabularnewline
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+county & 8.84e+06 & 2 & 0.819 & 0.452 \\
+related & 2.38e+06 & 1 & 0.441 & 0.513 \\
+Residuals & 1.40e+08 & 26 & NA & NA \\
+\end{longtable}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Summary of Coefficients for Additive Model}\tabularnewline
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Intercept & 6801 & 848 & 8.017 & 0.000 \\
+County 2 & -317 & 1039 & -0.305 & 0.762 \\
+County 3 & 960 & 1039 & 0.924 & 0.364 \\
+Related 1 & -563 & 848 & -0.664 & 0.513 \\
+\end{longtable}
+
+The two-way ANOVA model is:
+
+\[
+Y_{ijk} = \mu_{ij} + e_{ijk}
+\]
+
+where
+
+\[
+\mu_{ij} = \mu + \alpha_i + \beta_j + \gamma_{ij}
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \(\mu\) is the overall mean
+\item
+  \(\alpha_i\) is the main effect of \emph{County} (\(i = 1, 2, 3\))
+\item
+  \(\beta_j\) is the main effect of \emph{Related} (\(j = 0, 1\))
+\item
+  \(\gamma_{ij}\) is the interaction effect, which is 0 due to no
+  significant interaction.
+\end{itemize}
+
+Using the model \textbf{cropanov2}, the predicted \emph{Crops} for
+County 3 with no relation (Related = 0) is:
+
+\[
+Crops = 6800.6 + 959.7 + 0 = 7760.3
+\]
+
+Thus, the predicted value is 7760.3.
+
+\textbf{b)} Next, we add the variable \emph{Size} into the analysis with
+the aim to find out how it influences the effect of \emph{Related} or
+\emph{County} on \emph{Crops} in our model.
+
+\textbf{\emph{(A)}} ANCOVA test: \emph{Size * County} First, by getting
+a gimpse in distributions for different counties, we conclude they are
+different. Thus, we need to confirm our observation through a two-way
+ANCOVA model.
+
+\includegraphics{assign1_final_files/figure-latex/unnamed-chunk-17-1.pdf}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{ANOVA Table for Size and County Interaction}\tabularnewline
+\toprule\noalign{}
+Term & Sum\_Sq & Df & F\_Value & Pr\_F \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Sum\_Sq & Df & F\_Value & Pr\_F \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+size & 1.20e+08 & 1 & 138.673 & 0.000 \\
+county & 7.67e+05 & 2 & 0.445 & 0.646 \\
+size:county & 1.05e+07 & 2 & 6.085 & 0.007 \\
+Residuals & 2.07e+07 & 24 & NA & NA \\
+\end{longtable}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Model Summary for Size and County Interaction}\tabularnewline
+\toprule\noalign{}
+Term & Estimate & Std\_Error & t\_Value & Pr\_t \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Estimate & Std\_Error & t\_Value & Pr\_t \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Intercept & 2386.54 & 913.22 & 2.61 & 0.015 \\
+Size & 22.46 & 4.70 & 4.78 & 0.000 \\
+County 2 & -4370.41 & 1413.44 & -3.09 & 0.005 \\
+County 3 & -1340.39 & 1285.69 & -1.04 & 0.308 \\
+Size × County 2 & 27.51 & 7.89 & 3.49 & 0.002 \\
+Size × County 3 & 9.21 & 6.31 & 1.46 & 0.157 \\
+\end{longtable}
+
+Based on the result, there is a significant interaction effect between
+\emph{Size} and \emph{County} on \emph{Crops} (p-value = 0.007). Summary
+of the ANOVA model shows that the effect mainly lies on the combination
+of \emph{size:county 2} (p-value = 0.002), while \emph{size:county 3} is
+not significant (p-value = 0.157). Meanwhile, \emph{county 2} also has a
+significant main effect under the influence of \emph{Size} (p-value =
+0.005).
+
+\textbf{\emph{(B)}} ANCOVA \emph{Size * Related} In the box plot, the
+distribution of \emph{Size} does not differ much for different
+\emph{Related} values. The interaction effect is also not significant
+according to the result of the ANCOVA test (p=0.331). Therefore, we
+\textbf{cannot reject the null hypothesis} in this case.
+
+\includegraphics{assign1_final_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{ANOVA Results for Model with Size and Related}\tabularnewline
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+size & 1.20e+08 & 1 & 105.528 & 0.00 \\
+related & 1.38e+06 & 1 & 1.218 & 0.28 \\
+size:related & 1.11e+06 & 1 & 0.983 & 0.33 \\
+Residuals & 2.95e+07 & 26 & NA & NA \\
+\end{longtable}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Model Coefficients for Size and Related}\tabularnewline
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 1774.98 & 940.16 & 1.888 & 0.070 \\
+size & 28.21 & 4.84 & 5.828 & 0.000 \\
+related1 & -1583.66 & 1227.31 & -1.290 & 0.208 \\
+size:related1 & 6.27 & 6.33 & 0.992 & 0.330 \\
+\end{longtable}
+
+\textbf{\emph{(C)}} Lastly, we conduct two ANCOVA tests without
+interaction. We investigate the main effect of \emph{Related} under the
+influence of \emph{Size (cropanov5)}, and the main effect of \emph{Size}
+under the influence of \emph{Related (cropanov6).} Results show that
+\emph{Related} does not have a significant main effect on \emph{Crops}
+under the influence of \emph{Size}, but \emph{Size} has a significant
+main effect under the influence of \emph{Related}.
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{ANOVA Results for Model with Size and Related (Size
+first)}\tabularnewline
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+size & 1.20e+08 & 1 & 105.59 & 0.000 \\
+related & 1.38e+06 & 1 & 1.22 & 0.279 \\
+Residuals & 3.06e+07 & 27 & NA & NA \\
+\end{longtable}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Model Coefficients for Size and Related (Size
+first)}\tabularnewline
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 1092.8 & 640.63 & 1.71 & 0.100 \\
+size & 31.9 & 3.12 & 10.23 & 0.000 \\
+related1 & -429.3 & 388.79 & -1.10 & 0.279 \\
+\end{longtable}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{ANOVA Results for Model with Related and Size (Related
+first)}\tabularnewline
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+related & 2.38e+06 & 1 & 2.1 & 0.159 \\
+size & 1.19e+08 & 1 & 104.7 & 0.000 \\
+Residuals & 3.06e+07 & 27 & NA & NA \\
+\end{longtable}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Model Coefficients for Related and Size (Related
+first)}\tabularnewline
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 1092.8 & 640.63 & 1.71 & 0.100 \\
+related1 & -429.3 & 388.79 & -1.10 & 0.279 \\
+size & 31.9 & 3.12 & 10.23 & 0.000 \\
+\end{longtable}
+
+\textbf{c)} Based on our findings in part (b), we now include all
+factors (\emph{Related} and \emph{County}) and the exploratory variable
+(\emph{Size}) together in the same model, and subsequently conduct a
+full ANCOVA test. The full ANCOVA test also confirms what we found in
+section B in general. There is a significant main effect of variable
+\emph{Size (p =0.000)} and \emph{County 2 (p = 0.008)}. The interaction
+effect of \emph{Size:County} is also significant \emph{(p = 0.012)}.
+Different from section B, \emph{County} now also has a slightly
+significant main effect \emph{(p = 0.016)}, when \emph{County, Related}
+and \emph{Size} are all included into the model. Based on the summary,
+we can derive several conclusions:
+
+\begin{itemize}
+\item
+  There is a significant difference between crop values in these three
+  counties. County 2 yields significantly fewer crops than County 1
+  (Estimate = -4214.050).
+\item
+  Size has a significantly positive effect on crops, with a larger land
+  results in more crops (Estimate = 22.704).
+\item
+  The positive effect of size is more prominent in County 2, as there is
+  a significant interaction effect. They yield a higher crops value than
+  Size: County1 (Estimate = 26.590).
+\item
+  Value of crops does not depend on the relation of landlord and tenant
+  in all three counties, ,as the difference between different relations
+  is not statistically significant.
+\end{itemize}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{ANOVA Results for Model with County, Related, Size, and
+County:Size Interaction}\tabularnewline
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Sum of Squares & Df & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+county & 8.84e+06 & 2 & 5.01 & 0.016 \\
+related & 2.38e+06 & 1 & 2.70 & 0.114 \\
+size & 1.10e+08 & 1 & 125.33 & 0.000 \\
+county:size & 9.53e+06 & 2 & 5.40 & 0.012 \\
+Residuals & 2.03e+07 & 23 & NA & NA \\
+\end{longtable}
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Model Coefficients for County, Related, Size, and County:Size
+Interaction}\tabularnewline
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 2461.01 & 929.76 & 2.647 & 0.014 \\
+county2 & -4214.05 & 1447.24 & -2.912 & 0.008 \\
+county3 & -1284.81 & 1302.58 & -0.986 & 0.334 \\
+relatedyes & -239.10 & 347.92 & -0.687 & 0.499 \\
+size & 22.70 & 4.76 & 4.764 & 0.000 \\
+county2:size & 26.59 & 8.09 & 3.286 & 0.003 \\
+county3:size & 8.92 & 6.40 & 1.394 & 0.177 \\
+\end{longtable}
+
+\textbf{d)} We will apply model \textbf{cropanov7} to predict crops for
+a farm from County 2 of size 165, with related landlord and tenant. To
+do this we first have to know the mathematical formula for a full ANCOVA
+which is:
+
+\[ Y_{ijk} = \mu_{ij} + e_{ijk} \]
+
+where
+
+\[
+\mu_{ijk} = \mu + \alpha_i + \beta_j + \delta_k + \gamma_{ik}
+\]
+
+\(\mu\) is the overall mean
+
+\(\alpha_i\) is the main effect of level i of the factor \emph{County},
+i = 1,2,3
+
+\(\beta_j\) is the main effect of level j of the factor \emph{Related},
+j = 0,1
+
+\(\delta_k\) is the main effect of the exploratory variable Size, k =
+1\ldots n
+
+\(\gamma_ik\) is the interaction effect of levels i, k of factor
+\emph{County} and exploratory variable \emph{Size}.
+
+According to this equation, the crops from County 2 of size 165, and
+related landlord and tenant is:
+
+\[
+Crops = Intercept + County2 + Related1 + Size 165 + County2*Size165
+\]
+
+\[
+= 2461.014-4214.050-239.099+22.704*165+26.590*165 = 6141.378
+\]
+
+So the final crops value is 6141.378
+
+The error variance is given by:
+
+\[
+\hat{\sigma}^2 = \frac{\text{RSS}}{\text{df}}
+\]
+
+According to the summary of the \textbf{cropanov7,} we then have:\[
+\hat{\sigma}^2 = \frac{20277325}{23} = 881623
+\]
+
+The final estimated error variance is therefore 881623.
+
+\subsection{Exercise 3: Yield of peas}\label{exercise-3-yield-of-peas}
+
+\textbf{a)} For this exercise, we first present the R-code for the
+randomization process to distribute soil additives over plots in such a
+way that each soil additive is received exactly by two plots within each
+block.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\CommentTok{\#initial params}
+\NormalTok{I }\OtherTok{\textless{}{-}} \DecValTok{6}  \CommentTok{\# blocks}
+\NormalTok{J }\OtherTok{\textless{}{-}} \DecValTok{4}  \CommentTok{\# plots per block}
+
+\CommentTok{\#initial data frame}
+\NormalTok{randomized\_design }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{block =} \FunctionTok{rep}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{I, }\AttributeTok{each =}\NormalTok{ J),}
+  \AttributeTok{plot =} \FunctionTok{rep}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{J, }\AttributeTok{times =}\NormalTok{ I)}
+\NormalTok{)}
+
+\CommentTok{\# for each block b, put (N, P, K) on each 2 plots randomly}
+\ControlFlowTok{for}\NormalTok{ (b }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{I) \{}
+\NormalTok{  plots }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{J, J, }\AttributeTok{replace =} \ConstantTok{FALSE}\NormalTok{)  }\CommentTok{\# randomly reorder plots in each block}
+  
+  \CommentTok{\# put N in the header 2 plots}
+\NormalTok{  randomized\_design}\SpecialCharTok{$}\NormalTok{N[randomized\_design}\SpecialCharTok{$}\NormalTok{block }\SpecialCharTok{==}\NormalTok{ b] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{ifelse}\NormalTok{(plots }\SpecialCharTok{\%in\%}\NormalTok{ plots[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{], }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+  
+  \CommentTok{\# randomly put P in 2 plots}
+\NormalTok{  randomized\_design}\SpecialCharTok{$}\NormalTok{P[randomized\_design}\SpecialCharTok{$}\NormalTok{block }\SpecialCharTok{==}\NormalTok{ b] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{ifelse}\NormalTok{(plots }\SpecialCharTok{\%in\%} \FunctionTok{sample}\NormalTok{(plots, }\DecValTok{2}\NormalTok{), }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+  
+  \CommentTok{\# randomly put K in 2 plots}
+\NormalTok{  randomized\_design}\SpecialCharTok{$}\NormalTok{K[randomized\_design}\SpecialCharTok{$}\NormalTok{block }\SpecialCharTok{==}\NormalTok{ b] }\OtherTok{\textless{}{-}} 
+    \FunctionTok{ifelse}\NormalTok{(plots }\SpecialCharTok{\%in\%} \FunctionTok{sample}\NormalTok{(plots, }\DecValTok{2}\NormalTok{), }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# Optionally print the randomized design}
+\CommentTok{\# print(randomized\_design)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{b)} Then, the following plot illustrates that the average yields
+for soil treated by N are higher than for untreated soil. What's more,
+each block and treatment tend to have a similar change. Meanwhile, we
+have assigned treatments randomly to each soil within a block, which
+reduces the variation and gets more precise results.
+
+\begin{center}\includegraphics{assign1_final_files/figure-latex/unnamed-chunk-24-1} \end{center}
+
+\textbf{c)} For this part of the report we conduct a full two-way ANOVA
+with the response variable yield and the two factors; block and N. As
+visible from the results tables, p\textgreater{} 0.05, meaning there is
+no significant evidence of interaction effect.
+
+\begin{longtable}[]{@{}cccccc@{}}
+\caption{Two-Way ANOVA Results for Yield by Nitrogen and Block (With
+Interaction)}\tabularnewline
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+N & 1 & 189.3 & 189.3 & 9.261 & 0.010 \\
+block & 5 & 343.3 & 68.7 & 3.359 & 0.040 \\
+N:block & 5 & 98.5 & 19.7 & 0.964 & 0.477 \\
+Residuals & 12 & 245.3 & 20.4 & NA & NA \\
+\end{longtable}
+
+Now we turn to generating an additive model. Here in both cases
+p\textless0.05, so both factors have a main effect. From the results
+showed in table below, the p\_value of block is 0.007095 \textless{}
+0.05, and the N is the first order in our model, so it makes sense to
+include the block. The Fridman test cannot be applied in this situation
+because each block has more than one same value N, meanwhile, the
+treatments are not completely randomized.
+
+\begin{longtable}[]{@{}cccccc@{}}
+\caption{ANOVA Results for Yield by Nitrogen and Block (No
+Interaction)}\tabularnewline
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+N & 1 & 189 & 189.3 & 9.36 & 0.007 \\
+block & 5 & 343 & 68.7 & 3.40 & 0.026 \\
+Residuals & 17 & 344 & 20.2 & NA & NA \\
+\end{longtable}
+
+\textbf{d)} We want to explore interaction terms now, so first we do
+interactions with a pairwise model. From the results we see there is no
+interaction effect for either of the three.
+
+\begin{longtable}[]{@{}cccccc@{}}
+\caption{ANOVA Results for Pairwise P Model (block*P + N +
+K)}\tabularnewline
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+block & 5 & 343.3 & 68.7 & 4.068 & 0.028 \\
+P & 1 & 8.4 & 8.4 & 0.498 & 0.497 \\
+N & 1 & 189.3 & 189.3 & 11.214 & 0.007 \\
+K & 1 & 95.2 & 95.2 & 5.640 & 0.039 \\
+block:P & 5 & 71.4 & 14.3 & 0.846 & 0.547 \\
+Residuals & 10 & 168.8 & 16.9 & NA & NA \\
+\end{longtable}
+
+\begin{longtable}[]{@{}cccccc@{}}
+\caption{ANOVA Results for Pairwise K Model (block*K + P +
+N)}\tabularnewline
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+block & 5 & 343.3 & 68.7 & 4.041 & 0.029 \\
+K & 1 & 95.2 & 95.2 & 5.603 & 0.039 \\
+P & 1 & 8.4 & 8.4 & 0.494 & 0.498 \\
+N & 1 & 189.3 & 189.3 & 11.140 & 0.008 \\
+block:K & 5 & 70.3 & 14.1 & 0.827 & 0.558 \\
+Residuals & 10 & 169.9 & 17.0 & NA & NA \\
+\end{longtable}
+
+\begin{longtable}[]{@{}cccccc@{}}
+\caption{ANOVA Results for Pairwise N Model (block*N + K +
+P)}\tabularnewline
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F Value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+block & 5 & 343.3 & 68.7 & 4.847 & 0.016 \\
+N & 1 & 189.3 & 189.3 & 13.361 & 0.004 \\
+K & 1 & 95.2 & 95.2 & 6.720 & 0.027 \\
+P & 1 & 8.4 & 8.4 & 0.593 & 0.459 \\
+block:N & 5 & 98.5 & 19.7 & 1.391 & 0.307 \\
+Residuals & 10 & 141.7 & 14.2 & NA & NA \\
+\end{longtable}
+
+Then, we turn to an additive model. Here we notice p\textless0.05 for N
+and K, showing a main effect. However, for P p\textgreater0.05, so we
+can conclude that there is no significant effect. \textbf{We conclude
+that the best model is the additive ANOVA model.} Additive ANOVA model
+provides an overall indication of the effects of each factor N, P, K and
+block. From the p values we can tell additive model are better than the
+pairwise model. Furthermore, the pairwise models only focus on the
+interaction between two factors at a time, lacking the control for
+others.
+
+\begin{longtable}[]{@{}lccccc@{}}
+\caption{ANOVA Results for Additive Model (Yield \textasciitilde{} block
++ N + P + K)}\tabularnewline
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Term & Df & Sum Sq & Mean Sq & F value & Pr(\textgreater F) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+block & 5 & 343.3 & 68.7 & 4.288 & 0.013 \\
+N & 1 & 189.3 & 189.3 & 11.821 & 0.004 \\
+P & 1 & 8.4 & 8.4 & 0.525 & 0.480 \\
+K & 1 & 95.2 & 95.2 & 5.946 & 0.028 \\
+Residuals & 15 & 240.2 & 16.0 & NA & NA \\
+\end{longtable}
+
+\textbf{e)} From our resulting model in part d), we further investigate
+how the involved factors influence yield. From the summary we can see
+block 3 is the best in all blocks, and N1 is better than N0, which means
+N treated is better, while P and K are prefered to be untreated. So, the
+best combination is \textbf{(3, 1, 0, 0)} for (block, N, P, K), leading
+to the largest yield.
+
+\begin{longtable}[]{@{}lcccc@{}}
+\caption{Model Coefficients for Yield \textasciitilde{} block + N + K +
+P}\tabularnewline
+\toprule\noalign{}
+& Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Estimate & Std. Error & t Value &
+Pr(\textgreater\textbar t\textbar) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+(Intercept) & 53.80 & 2.45 & 21.955 & 0.000 \\
+block2 & 3.42 & 2.83 & 1.210 & 0.245 \\
+block3 & 6.75 & 2.83 & 2.386 & 0.031 \\
+block4 & -3.90 & 2.83 & -1.378 & 0.188 \\
+block5 & -3.50 & 2.83 & -1.237 & 0.235 \\
+block6 & 2.33 & 2.83 & 0.822 & 0.424 \\
+N1 & 5.62 & 1.63 & 3.438 & 0.004 \\
+K1 & -3.98 & 1.63 & -2.438 & 0.028 \\
+P1 & -1.18 & 1.63 & -0.724 & 0.480 \\
+\end{longtable}
+
+\textbf{f)} In conclusion, we want to perform a mixed eﬀects analysis
+for our model from task d), modeling the block variable as a random
+eﬀect. Then we compare our results to the results found by using the
+fixed eﬀects model. These are our findings: - AIC: The fixed effects
+model (AIC = 143.39) is lower than the mixed effects model (AIC =
+151.03), suggesting better model fit. - BIC: The fixed effects model
+(BIC = 155.17) is also lower, reinforcing the AIC results. -
+Log-likelihood: The fixed effects model has a higher log-likelihood
+(-61.695 vs.~-69.514), meaning it fits the data better. - Chi-square
+test: χ² = 15.639, p = 0.003544 (significant at p \textless{} 0.05),
+indicating that treating block as a fixed effect is more appropriate.
+
+The fixed effects model (lm(yield \textasciitilde{} block + N + P + K))
+provides a better fit than the mixed effects model.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.5956}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0515}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0294}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0368}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0368}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0588}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0588}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0662}}
+  >{\centering\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0662}}@{}}
+\caption{ANOVA Comparison of Mixed Model (with block as random effect)
+and Fixed Model}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Call
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+AIC
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+BIC
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+LogLik
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Test
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+L.Ratio
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+p-value
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Call
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+AIC
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+BIC
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+LogLik
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Test
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+L.Ratio
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+p-value
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+lme.formula(fixed = yield \textasciitilde{} N + P + K, data = npk,
+random = \textasciitilde1 \textbar{} block) & 1 & 6 & 140 & 146 & -64.0
+& & NA & NA \\
+lm(formula = yield \textasciitilde{} N + P + K + block, data = npk) & 2
+& 10 & 118 & 125 & -48.9 & 1 vs 2 & 30.2 & 0 \\
+\end{longtable}
+
+\end{document}

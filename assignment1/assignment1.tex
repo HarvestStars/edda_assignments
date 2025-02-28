@@ -1,0 +1,1161 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Experimental Design and Data Analysis - Assignment 1},
+  pdfauthor={Group 5 - Ivana Malčić, Xuening Tang, Xiaoxuan Zhang},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Experimental Design and Data Analysis - Assignment 1}
+\author{Group 5 - Ivana Malčić, Xuening Tang, Xiaoxuan Zhang}
+\date{2025-02-23}
+
+\begin{document}
+\maketitle
+
+\emph{In order not to be bothered with rounding the numbers, set
+\texttt{options(digits=3)r\ options(digits=3)}.}
+
+\subsection{Exercise 1: Cholesterol}\label{exercise-1-cholesterol}
+
+\textbf{a)} In this first section, both normality and variable
+correlation are explored using relevant plots and metrics. Firstly, the
+bell-like shape of the histograms indicates that the data is normally
+distributed.
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+The previous finding is further confirmed by the following QQ-plots
+where the data points seem relatively close to the reference line, again
+signaling normality.
+
+\begin{center}\includegraphics{assignment1_files/figure-latex/unnamed-chunk-2-1} \end{center}
+
+Additional data exploration gives us further insight; the close mean and
+median signify symetric distribution, a feature which is also a common
+attribute of normality. Moreover, the skewness for both variables tells
+us that the left tail is slightly longer (distribution skewed to the
+left). Finally, kurtosis of 2.5 and 2.27 indicates a peaked distribution
+with less outliers and a more or less uniform distribution.
+
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Descriptive Statistics for Cholesterol Levels}\tabularnewline
+\toprule\noalign{}
+Variable & Mean & Median & Skewness & Kurtosis \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Variable & Mean & Median & Skewness & Kurtosis \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Before & 6.41 & 6.50 & -0.28 & 2.50 \\
+After8weeks & 5.78 & 5.73 & -0.17 & 2.27 \\
+\end{longtable}
+
+After normality assesment, we turn to look at whether the two variables
+are correlated. For this we first utilize a simple scatterplot shown
+below which exhibits strong positive correlation visible by the densly
+clustered data points around the rising regression line.
+
+\begin{center}\includegraphics{assignment1_files/figure-latex/unnamed-chunk-4-1} \end{center}
+
+Then, Pearson´s test is employed - the correlation coefficient of 0.991
+indicates a strong and positive linear relationship between the two
+variables. Furthermore, the small p-value (\textless0.001) suggests this
+relationship is statistically significant, and therefore we can reject
+the null hypothesis of no correlation.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Pearson Correlation Test Results}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Correlation Coefficient & 0.991 \\
+P-value & 0 \\
+Confidence Interval & 0.975 to 0.997 \\
+\end{longtable}
+
+\textbf{b)} Now, our goal is to establish whether the low-fat margarine
+diet had any effect on cholesterol by utilizing 2 relevant test metrics.
+Since our data is paired, we first utilize a paired t-test. The large
+t-statistic and small p-value (p \textless{} 0.001) provide strong
+evidence against the null hypothesis of no difference. Additionally, the
+confidence interval suggests that the mean cholesterol level after 8
+weekes lies somewhere between 0.54 and 0.718 with 95\% confidence.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Paired t-Test Results}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+t-statistic & 14.946 \\
+Degrees of Freedom & 17 \\
+P-value & 0 \\
+Confidence Interval & 0.54 to 0.718 \\
+\end{longtable}
+
+Since our data are paired and normally distributed, the Mann-Whitney U
+test is not applicable in this scenario. However, we can apply the
+permutation test which is useful because it works well with small data
+volumes. The following permutation table reveals a similar trend as
+previously discussed with a statistically significant (p\textless0.001)
+average decrease in cholesterol levels by 0.629 units after the 8 week
+intervention.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Permutation Test Results}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Observed Mean Difference & 0.629 \\
+Permutation Test P-value & 0.000 \\
+\end{longtable}
+
+\textbf{c)} Next, we are constructing a 97\% CI and 97\% bootstrapped
+CI, as opposed to our previously used 95\% CI. As visible from
+\emph{Table 5}, we can be 97\% confident our true population parameter
+is encompased between the ranges of {[}5.16, 6.39{]} for normal CI and
+{[}5.23, 6.32{]} for the bootstrapped CI.
+
+\begin{longtable}[]{@{}llrr@{}}
+\caption{97\% Confidence Intervals for Mean}\tabularnewline
+\toprule\noalign{}
+& Method & Lower\_Bound & Upper\_Bound \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Method & Lower\_Bound & Upper\_Bound \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+& Normality (t-distribution) & 5.16 & 6.39 \\
+1.5\% & Bootstrap & 5.23 & 6.32 \\
+\end{longtable}
+
+\textbf{d)} Additionally, we use bootstrapping to come up with a 97\%
+confidence interval for the maximum statistic for various candidate
+values of θ, helping us reject or not reject the hypothesis that the
+data follow a Uniform{[}3,θ{]} distribution. \emph{Table 6} provides us
+with plausible candidate values for which we cannot reject the Null
+hypothesis. Kolmogorov-Smirnov test can also be applied in this case to
+test whether the data follows a uniform distribution.
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Non-Rejected Theta Values}\tabularnewline
+\toprule\noalign{}
+Theta & Lower Bound & Upper Bound \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Theta & Lower Bound & Upper Bound \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+7.7 & 6.72 & 7.70 \\
+7.8 & 6.81 & 7.80 \\
+7.9 & 6.90 & 7.90 \\
+8.0 & 6.98 & 8.00 \\
+8.1 & 7.07 & 8.10 \\
+8.2 & 7.13 & 8.20 \\
+8.3 & 7.20 & 8.30 \\
+8.4 & 7.29 & 8.39 \\
+8.5 & 7.36 & 8.50 \\
+8.6 & 7.45 & 8.60 \\
+8.7 & 7.52 & 8.70 \\
+8.8 & 7.57 & 8.79 \\
+8.9 & 7.68 & 8.90 \\
+\end{longtable}
+
+Kolmogorov-Smirnov test can also be applied in this case to test whether
+the data follows a uniform distribution.
+
+\begin{longtable}[]{@{}cc@{}}
+\caption{Theta Values with Non-Rejected KS Test}\tabularnewline
+\toprule\noalign{}
+Theta & P-Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Theta & P-Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+7.0 & 0.038 \\
+7.1 & 0.053 \\
+7.2 & 0.071 \\
+7.3 & 0.092 \\
+7.4 & 0.117 \\
+7.5 & 0.146 \\
+7.6 & 0.179 \\
+7.7 & 0.216 \\
+7.8 & 0.256 \\
+7.9 & 0.299 \\
+8.0 & 0.345 \\
+8.1 & 0.394 \\
+8.2 & 0.444 \\
+8.3 & 0.495 \\
+8.4 & 0.509 \\
+8.5 & 0.419 \\
+8.6 & 0.342 \\
+8.7 & 0.277 \\
+8.8 & 0.223 \\
+8.9 & 0.179 \\
+9.0 & 0.143 \\
+9.1 & 0.114 \\
+9.2 & 0.091 \\
+9.3 & 0.072 \\
+9.4 & 0.057 \\
+9.5 & 0.045 \\
+9.6 & 0.036 \\
+\end{longtable}
+
+\textbf{e)} Finally, we are testing the following Null hypothesis:
+\emph{Null hypothesis (}\(H_0\)): The median cholesterol level after 8
+weeks is 6. With the results presented below we can conclude there is
+not enough statistical evidence to conclude that the median cholesterol
+level after 8 weeks is less than 6. While 61.1\% of the sample is below
+6, this deviation could easily be due to random variation given the
+sample size (p\textgreater0.1).
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Median Test Results (H₀: median = 6)}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sample Size & 18 \\
+Number \textless{} 6 & 11 \\
+Observed Proportion & 0.611 \\
+p-value & 0.24 \\
+95\% CI & 0.392 to 1 \\
+\end{longtable}
+
+Subsequently, our second Null hypothesis goes as following: \emph{Null
+hypothesis (}\(H_0\)): the fraction of cholesterol levels below 4.5 is
+at most 0.25. Similarly, we also cannot reject this hypothesis because
+of the very high p-value (p\textgreater0.1) and a wide CI.
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{Fraction Test Results (H₀: fraction below 4.5 is
+25\%)}\tabularnewline
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Statistic & Value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sample Size & 18 \\
+Number \textless{} 4.5 & 3 \\
+Observed Proportion & 0.167 \\
+p-value & 0.865 \\
+95\% CI & 0.047 to 1.000 \\
+\end{longtable}
+
+\subsection{Exercise 2}\label{exercise-2}
+
+\paragraph{Section a}\label{section-a}
+
+Before conducting the ANOVA test, we first plotted two interaction plots
+to get a first glimpse of the potential interaction effect. Based on the
+two interaction plots, it seems there is little interaction effect, as
+the lines are parallel in general. We then conduct a two-way ANOVA to
+confirm our observation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(related,county,crops) }\CommentTok{\# fix county}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(county,related,crops) }\CommentTok{\# fix related}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-15-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{is.factor}\NormalTok{(county) }\CommentTok{\# check if county and related are factors}
+\FunctionTok{is.factor}\NormalTok{(related)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cropanov}\OtherTok{=}\FunctionTok{lm}\NormalTok{(crops}\SpecialCharTok{\textasciitilde{}}\NormalTok{county}\SpecialCharTok{*}\NormalTok{related); }\FunctionTok{anova}\NormalTok{(cropanov) }\CommentTok{\# conduct the two{-}way ANOVA test}
+\FunctionTok{summary}\NormalTok{(cropanov)}
+\end{Highlighting}
+\end{Shaded}
+
+Result shows that there is no interaction effect between \emph{Related}
+and \emph{County} on \emph{Crops}. None of the p values for
+\emph{County}, \emph{Crops} and \emph{County:Related} are significant (p
+= 0.477; p = 0.527; p = 0.879). To make sure that this result is valid,
+we plot a Q-Q plot and residual plot. Based on the two plots, the
+assumption of normality is met: Q-Q plot gives a straight line in
+general, and the residuals display no pattern.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(cropanov)); }\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(cropanov),}\FunctionTok{residuals}\NormalTok{(cropanov))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+In the next step, we remove the interaction and apply an additive model.
+The code and results are shown below:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cropanov2}\OtherTok{=}\FunctionTok{lm}\NormalTok{(crops}\SpecialCharTok{\textasciitilde{}}\NormalTok{county}\SpecialCharTok{+}\NormalTok{related,}\AttributeTok{data=}\NormalTok{cropframe); }\FunctionTok{anova}\NormalTok{(cropanov2) }\CommentTok{\# additive model}
+\FunctionTok{summary}\NormalTok{(cropanov2)}
+\end{Highlighting}
+\end{Shaded}
+
+The result of the additive model shows that neither of the factors has a
+significant main effect on Crops. The p-values are 0.4518 and 0.5126 for
+\emph{County} and \emph{Related} respectively, and are larger than the
+0.05 significance level in both cases. Therefore, we fail to reject none
+of our hypotheses. The normality assumption of this ANOVA test is also
+met based on the following Q-Q plot and residual plot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(cropanov2)); }\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(cropanov2),}\FunctionTok{residuals}\NormalTok{(cropanov2))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-20-1.pdf}
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-20-2.pdf}
+
+Summary for the decisions to the null hypotheses:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Hypothesis & Decision \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\(H_{AB}\) & not reject \\
+\(H_{A}\) & not reject \\
+\(H_{B}\) & not reject \\
+\end{longtable}
+
+The mathematical formula for a two-way ANOVA model is:
+
+\[
+Y_{ijk} = \mu_{ij} + e_{ijk}
+\]
+
+where
+
+\[
+\mu_{ij} = \mu + \alpha_i + \beta_j + \gamma_{ij}
+\]
+
+\(\mu\) is the overall mean
+
+\(\alpha_i\) is the main effect of level i of the factor \emph{County},
+i = 1,2,3
+
+\(\beta_j\) is the main effect of level j of the factor \emph{Related},
+j = 0,1
+
+\(\gamma_ij\) is the interaction effect of levels i, j of factor
+\emph{County} and \emph{Related}, which is 0 in this case, since there
+is no significant interaction effect.
+
+We apply the model \textbf{cropanov2} for prediction.Therefore, the
+crops in \emph{County 3} for which there is no related is:
+
+\[
+Crops = Intercept + County3 + Related0 = 6800.6 + 959.7 + 0 = 7760.3
+\]
+
+Therefore, the predicted value of the Crops is 7760.3.
+
+\paragraph{Section b}\label{section-b}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{size }\OtherTok{=}\NormalTok{ crop\_data}\SpecialCharTok{$}\NormalTok{Size}
+\FunctionTok{boxplot}\NormalTok{(size}\SpecialCharTok{\textasciitilde{}}\NormalTok{county)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-21-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cropanov3}\OtherTok{=}\FunctionTok{lm}\NormalTok{(crops}\SpecialCharTok{\textasciitilde{}}\NormalTok{size}\SpecialCharTok{*}\NormalTok{county,}\AttributeTok{data=}\NormalTok{cropframe);}\FunctionTok{anova}\NormalTok{(cropanov3)}
+\FunctionTok{summary}\NormalTok{(cropanov3)}
+\end{Highlighting}
+\end{Shaded}
+
+Based on the result, there is a significant interaction effect between
+\emph{Size} and \emph{County} on \emph{Crops (p-value = 0.007)}. Summary
+of the ANOVA model shows that the effect mainly lies on the combination
+of \emph{size:county 2 (p-value = 0.002)}, while size:county 3 is not
+significant (p-value = 0.157). Meanwhile, \emph{county 2} also has a
+significant main effect under the influence of \emph{Size} (p-value =
+0.005). Q-Q plot and residual plot show that the assumption of normality
+is met in this case:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(cropanov3)); }\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(cropanov3),}\FunctionTok{residuals}\NormalTok{(cropanov3))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-23-1.pdf}
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-23-2.pdf}
+
+We \textbf{reject the null hypothesis} that there is no interaction
+effect between \emph{Size} and \emph{County}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  ANCOVA test: \emph{Size * Related}
+\end{enumerate}
+
+\(H_{AB}\) There is no interaction effect between \emph{Size} and
+\emph{Related} on \emph{Crops}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{boxplot}\NormalTok{(size}\SpecialCharTok{\textasciitilde{}}\NormalTok{related)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-24-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cropanov4}\OtherTok{=}\FunctionTok{lm}\NormalTok{(crops}\SpecialCharTok{\textasciitilde{}}\NormalTok{size}\SpecialCharTok{*}\NormalTok{related,}\AttributeTok{data=}\NormalTok{cropframe);}\FunctionTok{anova}\NormalTok{(cropanov4)}
+\FunctionTok{summary}\NormalTok{(cropanov4)}
+\end{Highlighting}
+\end{Shaded}
+
+In the box plot, the distribution of \emph{Size} does not differ much
+for different \emph{Related} values. The interaction effect is also not
+significant according to the result of the ANCOVA test (p=0.331).
+Therefore, we \textbf{cannot reject the null hypothesis} in this case.
+The assumption of normality is met in general, though one can argue that
+there are more residuals on the lower fitted value side.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(cropanov4)); }\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(cropanov4),}\FunctionTok{residuals}\NormalTok{(cropanov4))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-26-1.pdf}
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-26-2.pdf}
+
+We then conduct two ANCOVA tests without interaction. We investigate the
+main effect of \emph{Related} under the influence of \emph{Size
+(cropanov5)}, and the main effect of \emph{Size} under the influence of
+\emph{Related (cropanov6).}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cropanov5}\OtherTok{=}\FunctionTok{lm}\NormalTok{(crops}\SpecialCharTok{\textasciitilde{}}\NormalTok{size}\SpecialCharTok{+}\NormalTok{related,}\AttributeTok{data=}\NormalTok{cropframe);}\FunctionTok{anova}\NormalTok{(cropanov5)}\CommentTok{\# related on the second place}
+\FunctionTok{summary}\NormalTok{(cropanov5)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cropanov6}\OtherTok{=}\FunctionTok{lm}\NormalTok{(crops}\SpecialCharTok{\textasciitilde{}}\NormalTok{related}\SpecialCharTok{+}\NormalTok{size,}\AttributeTok{data=}\NormalTok{cropframe);}\FunctionTok{anova}\NormalTok{(cropanov6)}\CommentTok{\# size on the second place}
+\FunctionTok{summary}\NormalTok{(cropanov6)}
+\end{Highlighting}
+\end{Shaded}
+
+Results show that \emph{Related} does not have a significant main effect
+on \emph{Crops} under the influence of \emph{Size}, but \emph{Size} has
+a significant main effect under the influence of \emph{Related}. The
+normality assumption of both of the ANCOVA tests are met in general,
+although there seems to be more residuals in the area with a lower
+fitted score:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(cropanov5)); }\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(cropanov5),}\FunctionTok{residuals}\NormalTok{(cropanov5))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-29-1.pdf}
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-29-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(cropanov6)); }\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(cropanov4),}\FunctionTok{residuals}\NormalTok{(cropanov6))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-30-1.pdf}
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-30-2.pdf}
+
+Summary of this part:
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\item
+  There is a significant interaction effect between \emph{Size} and
+  \emph{County} on \emph{Crops}. The combination \emph{Size:County 2} is
+  making the most contribution.
+\item
+  No significant interaction effect is found for \emph{Size * Related}.
+\item
+  \emph{Related} has no significant main effect on \emph{Crops} under
+  the influence of \emph{Size}, while \emph{Size} has a significant main
+  effect on \emph{Crops} under the influence of \emph{Related}.
+\end{enumerate}
+
+\paragraph{Section c}\label{section-c}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cropanov7}\OtherTok{=}\FunctionTok{lm}\NormalTok{(crops }\SpecialCharTok{\textasciitilde{}}\NormalTok{ county}\SpecialCharTok{+}\NormalTok{related}\SpecialCharTok{+}\NormalTok{size}\SpecialCharTok{+}\NormalTok{county}\SpecialCharTok{*}\NormalTok{size, }\AttributeTok{data =}\NormalTok{ crop\_data);}\FunctionTok{anova}\NormalTok{(cropanov7)}\CommentTok{\# size on the second place}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: crops
+##             Df   Sum Sq  Mean Sq F value  Pr(>F)    
+## county       2 8.84e+06 4.42e+06    5.01   0.016 *  
+## related      1 2.38e+06 2.38e+06    2.70   0.114    
+## size         1 1.10e+08 1.10e+08  125.33 8.7e-11 ***
+## county:size  2 9.53e+06 4.76e+06    5.40   0.012 *  
+## Residuals   23 2.03e+07 8.82e+05                    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(cropanov7)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = crops ~ county + related + size + county * size, 
+##     data = crop_data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1477.6  -517.1    63.9   639.6  1690.3 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)   2461.01     929.76    2.65   0.0144 *  
+## county2      -4214.05    1447.24   -2.91   0.0079 ** 
+## county3      -1284.81    1302.58   -0.99   0.3342    
+## related1      -239.10     347.92   -0.69   0.4988    
+## size            22.70       4.77    4.76  8.4e-05 ***
+## county2:size    26.59       8.09    3.29   0.0032 ** 
+## county3:size     8.92       6.40    1.39   0.1768    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 939 on 23 degrees of freedom
+## Multiple R-squared:  0.866,  Adjusted R-squared:  0.831 
+## F-statistic: 24.8 on 6 and 23 DF,  p-value: 5.85e-09
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(cropanov7)); }\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(cropanov7),}\FunctionTok{residuals}\NormalTok{(cropanov7))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-32-1.pdf}
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-32-2.pdf}
+
+Result of a full ANCOVA test also confirms what we found in section B in
+general. There is a significant main effect of variable \emph{Size (p =
+0.000)} and \emph{County 2 (p = 0.008)}. The interaction effect of
+\emph{Size:County} is therefore also significant \emph{(p = 0.012)}.
+Different from section B, \emph{County} now also has a slightly
+significant main effect \emph{(p = 0.016)}, when \emph{County, Related}
+and \emph{Size} are all included into the model. The assumption of
+normality is met according to the Q-Q plot and residual plot.
+
+\paragraph{Section d}\label{section-d}
+
+We will apply model \textbf{cropanov7} to make the prediction. The
+mathematical formula for a full ANCOVA is:
+
+\[ Y_{ijk} = \mu_{ij} + e_{ijk} \]
+
+According to this equation, the crops from County 2 of size 165, and
+related landlord and tenant is therefore:
+
+\[
+Crops = Intercept + County2 + Related1 + Size 165 + County2*Size165
+\]
+
+So the final crops value is 6141.378
+
+The error variance is given by:
+
+\[
+\hat{\sigma}^2 = \frac{\text{RSS}}{\text{df}}
+\]
+
+According to the summary of the \textbf{cropanov7,} we then have:\[
+\hat{\sigma}^2 = \frac{20277325}{23} = 881623
+\]
+
+The error variance is therefore 881623
+
+\subsection{Exercise 3: Yield of peas}\label{exercise-3-yield-of-peas}
+
+\subsubsection{Section a}\label{section-a-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(}\StringTok{\textquotesingle{}MASS\textquotesingle{}}\NormalTok{)}
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)  }\CommentTok{\# add random seed for reproduce}
+
+\CommentTok{\# initial params}
+\NormalTok{I }\OtherTok{\textless{}{-}} \DecValTok{6}  \CommentTok{\# blocks}
+\NormalTok{J }\OtherTok{\textless{}{-}} \DecValTok{4}  \CommentTok{\# plots per block}
+
+\CommentTok{\# initial data frame}
+\NormalTok{randomized\_design }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{block =} \FunctionTok{rep}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{I, }\AttributeTok{each =}\NormalTok{ J), }\AttributeTok{plot =} \FunctionTok{rep}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{J, }\AttributeTok{times =}\NormalTok{ I))}
+
+\CommentTok{\# for each block b, put (N, P, K) on each 2 plots randomly}
+\ControlFlowTok{for}\NormalTok{ (b }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{I) \{}
+\NormalTok{  plots }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{J, J, }\AttributeTok{replace =} \ConstantTok{FALSE}\NormalTok{)  }\CommentTok{\# randomly reorder plots in each block}
+  
+  \CommentTok{\# put N in the header 2 plots}
+\NormalTok{  randomized\_design}\SpecialCharTok{$}\NormalTok{N[randomized\_design}\SpecialCharTok{$}\NormalTok{block }\SpecialCharTok{==}\NormalTok{ b] }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(plots }\SpecialCharTok{\%in\%}\NormalTok{ plots[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{2}\NormalTok{], }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+  
+  \CommentTok{\# randomly put P in 2 plots}
+\NormalTok{  randomized\_design}\SpecialCharTok{$}\NormalTok{P[randomized\_design}\SpecialCharTok{$}\NormalTok{block }\SpecialCharTok{==}\NormalTok{ b] }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(plots }\SpecialCharTok{\%in\%} \FunctionTok{sample}\NormalTok{(plots, }\DecValTok{2}\NormalTok{), }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+  
+  \CommentTok{\# randomly put K in 2 plots}
+\NormalTok{  randomized\_design}\SpecialCharTok{$}\NormalTok{K[randomized\_design}\SpecialCharTok{$}\NormalTok{block }\SpecialCharTok{==}\NormalTok{ b] }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(plots }\SpecialCharTok{\%in\%} \FunctionTok{sample}\NormalTok{(plots, }\DecValTok{2}\NormalTok{), }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# print the plots}
+\FunctionTok{print}\NormalTok{(randomized\_design)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    block plot N P K
+## 1      1    1 1 0 0
+## 2      1    2 1 1 1
+## 3      1    3 0 1 0
+## 4      1    4 0 0 1
+## 5      2    1 1 1 0
+## 6      2    2 1 1 1
+## 7      2    3 0 0 1
+## 8      2    4 0 0 0
+## 9      3    1 1 1 1
+## 10     3    2 1 0 0
+## 11     3    3 0 0 0
+## 12     3    4 0 1 1
+## 13     4    1 1 1 0
+## 14     4    2 1 1 1
+## 15     4    3 0 0 1
+## 16     4    4 0 0 0
+## 17     5    1 1 0 0
+## 18     5    2 1 0 1
+## 19     5    3 0 1 0
+## 20     5    4 0 1 1
+## 21     6    1 1 0 1
+## 22     6    2 1 1 0
+## 23     6    3 0 1 1
+## 24     6    4 0 0 0
+\end{verbatim}
+
+\subsubsection{Section b}\label{section-b-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# combine those yield in the same block same N, and calc its mean}
+\NormalTok{yield\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{tapply}\NormalTok{(npk}\SpecialCharTok{$}\NormalTok{yield, }\FunctionTok{list}\NormalTok{(npk}\SpecialCharTok{$}\NormalTok{block, npk}\SpecialCharTok{$}\NormalTok{N), mean)}
+
+\CommentTok{\# plot bars}
+\FunctionTok{barplot}\NormalTok{(}\FunctionTok{t}\NormalTok{(yield\_matrix), }\AttributeTok{beside =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{col =} \FunctionTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{, }\StringTok{"blue"}\NormalTok{),}
+        \AttributeTok{main =} \StringTok{"Average Yield per Block for Nitrogen Treatment"}\NormalTok{,}
+        \AttributeTok{xlab =} \StringTok{"Block"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Average Yield"}\NormalTok{)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"top"}\NormalTok{, }\AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"N=0"}\NormalTok{, }\StringTok{"N=1"}\NormalTok{), }\AttributeTok{fill =} \FunctionTok{c}\NormalTok{(}\StringTok{"red"}\NormalTok{, }\StringTok{"blue"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-34-1.pdf}
+
+This plot illustrates that the average yields for soil treated by N are
+higher than for untreated soil. What's more, each block and treatment
+tend to have a similar change.
+
+Meanwhile, we here have assigned treatments randomly to each soil within
+a block, which reduces the variation and get more precise results.
+
+\subsubsection{Section c}\label{section-c-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data0 }\OtherTok{=}\NormalTok{ npk}
+\NormalTok{data0}\SpecialCharTok{$}\NormalTok{block }\OtherTok{=} \FunctionTok{as.factor}\NormalTok{(data0}\SpecialCharTok{$}\NormalTok{block)}
+\NormalTok{data0}\SpecialCharTok{$}\NormalTok{N }\OtherTok{=} \FunctionTok{as.factor}\NormalTok{(data0}\SpecialCharTok{$}\NormalTok{N)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Two{-}Way ANOVA}
+\NormalTok{model2way }\OtherTok{=} \FunctionTok{lm}\NormalTok{(yield}\SpecialCharTok{\textasciitilde{}}\NormalTok{N}\SpecialCharTok{*}\NormalTok{block, }\AttributeTok{data=}\NormalTok{data0)}
+\FunctionTok{anova}\NormalTok{(model2way)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: yield
+##           Df Sum Sq Mean Sq F value Pr(>F)  
+## N          1    189   189.3    9.26   0.01 *
+## block      5    343    68.7    3.36   0.04 *
+## N:block    5     99    19.7    0.96   0.48  
+## Residuals 12    245    20.4                 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+p \textgreater{} 0.05, which means there is no significant evidence of
+interaction effect.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(data0}\SpecialCharTok{$}\NormalTok{N,data0}\SpecialCharTok{$}\NormalTok{block,data0}\SpecialCharTok{$}\NormalTok{yield)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-37-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{interaction.plot}\NormalTok{(data0}\SpecialCharTok{$}\NormalTok{block,data0}\SpecialCharTok{$}\NormalTok{N,data0}\SpecialCharTok{$}\NormalTok{yield)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-37-2.pdf}
+
+Interaction plot also display parallel lines, indicating no interaction.
+
+So, we have to try the ``additive'' model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{modeladd }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(yield }\SpecialCharTok{\textasciitilde{}}\NormalTok{ N }\SpecialCharTok{+}\NormalTok{ block, }\AttributeTok{data =}\NormalTok{ data0)}
+\FunctionTok{anova}\NormalTok{(modeladd)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: yield
+##           Df Sum Sq Mean Sq F value Pr(>F)   
+## N          1    189   189.3    9.36 0.0071 **
+## block      5    343    68.7    3.40 0.0262 * 
+## Residuals 17    344    20.2                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+In both cases p \textless{} 0.05, so both factors have a main effect in
+the ``additive'' model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Diagnostics:}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow=}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)) }
+\FunctionTok{qqnorm}\NormalTok{(}\FunctionTok{residuals}\NormalTok{(modeladd)); }\FunctionTok{plot}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(modeladd),}\FunctionTok{residuals}\NormalTok{(modeladd))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{assignment1_files/figure-latex/unnamed-chunk-39-1.pdf}
+
+From QQPlot, we can tell that the curve more or less straight, so it is
+likely normal. Meanwhile, there is no significant pattern in the fitted
+plot, which is good and means the residual is independent and identical.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Was it sensible to include factor block into this model?} From
+  the results showed in ``additive'' model, the p\_value of block is
+  0.007095 \textless{} 0.05, and the N is the first order in our model,
+  so it makes sense to include the block.
+\item
+  \textbf{Can we also apply the Friedman test for this situation?} No,
+  because each block has more than one same value N, meanwhile, the
+  treatments are not completely randomized.
+\end{itemize}
+
+\subsubsection{Section d}\label{section-d-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pairwiseP }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(yield }\SpecialCharTok{\textasciitilde{}}\NormalTok{ block}\SpecialCharTok{*}\NormalTok{P }\SpecialCharTok{+}\NormalTok{ N }\SpecialCharTok{+}\NormalTok{ K, }\AttributeTok{data =}\NormalTok{ data0) }
+\NormalTok{pairwiseK }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(yield }\SpecialCharTok{\textasciitilde{}}\NormalTok{ block}\SpecialCharTok{*}\NormalTok{K }\SpecialCharTok{+}\NormalTok{ P }\SpecialCharTok{+}\NormalTok{ N, }\AttributeTok{data =}\NormalTok{ data0) }
+\NormalTok{pairwiseN }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(yield }\SpecialCharTok{\textasciitilde{}}\NormalTok{ block}\SpecialCharTok{*}\NormalTok{N }\SpecialCharTok{+}\NormalTok{ K }\SpecialCharTok{+}\NormalTok{ P, }\AttributeTok{data =}\NormalTok{ data0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{anova}\NormalTok{(pairwiseP); }\FunctionTok{anova}\NormalTok{(pairwiseK); }\FunctionTok{anova}\NormalTok{(pairwiseN)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: yield
+##           Df Sum Sq Mean Sq F value Pr(>F)   
+## block      5    343    68.7    4.07 0.0282 * 
+## P          1      8     8.4    0.50 0.4966   
+## N          1    189   189.3   11.21 0.0074 **
+## K          1     95    95.2    5.64 0.0389 * 
+## block:P    5     71    14.3    0.85 0.5473   
+## Residuals 10    169    16.9                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: yield
+##           Df Sum Sq Mean Sq F value Pr(>F)   
+## block      5    343    68.7    4.04 0.0288 * 
+## K          1     95    95.2    5.60 0.0395 * 
+## P          1      8     8.4    0.49 0.4980   
+## N          1    189   189.3   11.14 0.0075 **
+## block:K    5     70    14.1    0.83 0.5583   
+## Residuals 10    170    17.0                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: yield
+##           Df Sum Sq Mean Sq F value Pr(>F)   
+## block      5    343    68.7    4.85 0.0164 * 
+## N          1    189   189.3   13.36 0.0044 **
+## K          1     95    95.2    6.72 0.0268 * 
+## P          1      8     8.4    0.59 0.4590   
+## block:N    5     99    19.7    1.39 0.3066   
+## Residuals 10    142    14.2                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+No interaction effect for either of the three, thus we do an additive
+model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{modeladd2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(yield }\SpecialCharTok{\textasciitilde{}}\NormalTok{ block }\SpecialCharTok{+}\NormalTok{ N }\SpecialCharTok{+}\NormalTok{ P }\SpecialCharTok{+}\NormalTok{ K, }\AttributeTok{data =}\NormalTok{ data0); }\FunctionTok{anova}\NormalTok{(modeladd2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Analysis of Variance Table
+## 
+## Response: yield
+##           Df Sum Sq Mean Sq F value Pr(>F)   
+## block      5    343    68.7    4.29 0.0127 * 
+## N          1    189   189.3   11.82 0.0037 **
+## P          1      8     8.4    0.52 0.4800   
+## K          1     95    95.2    5.95 0.0277 * 
+## Residuals 15    240    16.0                  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+p \textless{} 0.05 for N and K, showing a main effect. p \textgreater{}
+0.05 for P, so we can conclude that there is no significant effect.
+
+\textbf{We conclude that the best model is the additive ANOVA model.}
+Additive ANOVA model provides an overall indication of the effects of
+each factor N, P, K and block. From the p values we can tell additive
+model are better than the pairwise model. Furthermore, the pairwise
+models only focus on the interaction between two factors at a time,
+lacking the control for others.
+
+\subsubsection{Section e}\label{section-e}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model\_d }\OtherTok{=} \FunctionTok{lm}\NormalTok{(yield }\SpecialCharTok{\textasciitilde{}}\NormalTok{ block }\SpecialCharTok{+}\NormalTok{ N }\SpecialCharTok{+}\NormalTok{ K }\SpecialCharTok{+}\NormalTok{ P, }\AttributeTok{data =}\NormalTok{ data0)}
+\FunctionTok{summary}\NormalTok{(model\_d)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = yield ~ block + N + K + P, data = data0)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -7.000 -1.708 -0.083  2.246  6.483 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)    53.80       2.45   21.96  8.1e-13 ***
+## block2          3.43       2.83    1.21   0.2448    
+## block3          6.75       2.83    2.39   0.0307 *  
+## block4         -3.90       2.83   -1.38   0.1883    
+## block5         -3.50       2.83   -1.24   0.2351    
+## block6          2.32       2.83    0.82   0.4241    
+## N1              5.62       1.63    3.44   0.0037 ** 
+## K1             -3.98       1.63   -2.44   0.0277 *  
+## P1             -1.18       1.63   -0.72   0.4800    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4 on 15 degrees of freedom
+## Multiple R-squared:  0.726,  Adjusted R-squared:  0.58 
+## F-statistic: 4.97 on 8 and 15 DF,  p-value: 0.00376
+\end{verbatim}
+
+From the summary we can see block 3 is the best in all blocks, and N1 is
+better than N0, which means N treated is better, while P and K are
+prefered to be untreated. So, the best combination is \textbf{(3, 1, 0,
+0)} for (block, N, P, K), leading the largest yield.
+
+\subsubsection{Section f}\label{section-f}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(}\StringTok{\textquotesingle{}MASS\textquotesingle{}}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(}\StringTok{\textquotesingle{}lme4\textquotesingle{}}\NormalTok{)}
+\NormalTok{data0 }\OtherTok{=}\NormalTok{ npk}
+
+\NormalTok{model\_mixed }\OtherTok{\textless{}{-}} \FunctionTok{lmer}\NormalTok{(yield }\SpecialCharTok{\textasciitilde{}}\NormalTok{ N}\SpecialCharTok{+}\NormalTok{P}\SpecialCharTok{+}\NormalTok{K}\SpecialCharTok{+}\NormalTok{(}\DecValTok{1}\SpecialCharTok{|}\NormalTok{block),}\AttributeTok{data=}\NormalTok{data0,}\AttributeTok{REML=}\ConstantTok{FALSE}\NormalTok{) }
+\NormalTok{model\_fixed }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(yield }\SpecialCharTok{\textasciitilde{}}\NormalTok{  N }\SpecialCharTok{+}\NormalTok{ P }\SpecialCharTok{+}\NormalTok{ K }\SpecialCharTok{+}\NormalTok{ block, }\AttributeTok{data =}\NormalTok{ data0)}
+\FunctionTok{anova}\NormalTok{(model\_mixed,model\_fixed) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data: data0
+## Models:
+## model_mixed: yield ~ N + P + K + (1 | block)
+## model_fixed: yield ~ N + P + K + block
+##             npar AIC BIC logLik deviance Chisq Df Pr(>Chisq)   
+## model_mixed    6 151 158  -69.5      139                       
+## model_fixed   10 143 155  -61.7      123  15.6  4     0.0035 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+The model comparison results are:
+
+\begin{itemize}
+\tightlist
+\item
+  AIC: The fixed effects model (AIC = 143.39) is lower than the mixed
+  effects model (AIC = 151.03), suggesting better model fit.
+\item
+  BIC: The fixed effects model (BIC = 155.17) is also lower, reinforcing
+  the AIC results.
+\item
+  Log-likelihood: The fixed effects model has a higher log-likelihood
+  (-61.695 vs.~-69.514), meaning it fits the data better.
+\item
+  Chi-square test: χ² = 15.639, p = 0.003544 (significant at p
+  \textless{} 0.05), indicating that treating block as a fixed effect is
+  more appropriate.
+\end{itemize}
+
+The fixed effects model (lm(yield \textasciitilde{} block + N + P + K))
+provides a better fit than the mixed effects model.
+
+\end{document}
