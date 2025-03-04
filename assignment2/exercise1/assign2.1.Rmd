@@ -1,0 +1,193 @@
+---
+title: "Assignment 2.1"
+author: "Xuening Tang, group5"
+date: "4th March 2025"
+output: pdf_document
+highlight: tango
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise 1
+
+#### Section a
+
+We first give a summary of the data:
+
+```{r}
+titanic <- read.delim("titanic.txt", header=TRUE)
+age <- as.numeric(titanic$Age)
+sex = as.factor(titanic$Sex)
+class = as.factor(titanic$PClass)
+survive = as.factor(titanic$Survived)
+```
+
+```{r}
+par(mfrow=c(1,3))
+hist(age, col = "green")  # distribution of age
+
+tab <- xtabs(~survive + class, data = titanic)
+prop_tab <- prop.table(tab, margin = 1)
+barplot(prop_tab, main="survival vs. class",
+        col = c("red", "blue"),
+        beside = TRUE,
+        xlab = "Class", ylab = "Survival") # class vs survival
+
+tab <- xtabs(~survive + sex, data = titanic)
+prop_tab1 <- prop.table(tab, margin = 1)
+barplot(prop_tab1, main="survival vs.sex",
+        col = c("red", "blue"),
+        beside = TRUE,
+        xlab = "Sex", ylab = "Survival") # Sex vs survival
+```
+
+The first bar plot illustrates the distribution of age. Most people were
+around the age of 20 to 40. The second bar plot compares the survival
+rate in different classes (red: death; blue: survive). Most people in
+the 1st class survived, while most people in the 3rd class died. The
+plot on the right side compares the survival rate in different sexes
+(red: death; blue: survive). A bigger proportion of survived customers
+were females, while males contributed to a higher proportion of deaths.
+
+We fitted the data with a logistic regression model, with survival as
+the outcome variable, age as the exploratory variable, and class and sex
+as the factors. The null hypotheses are:
+
+$H_a$ *Factor class and sex have no influence on the survival status.*
+
+$H_b$ *Explanatory variable age has no influence on the survival
+status.*
+
+```{r}
+tiglm=glm(survive~class+age+sex,data=titanic,family=binomial)
+summary(tiglm)
+```
+
+Based on the result of the test, all three variables have **a
+significant effect** on the survival status, so both null hypotheses are
+rejected. The calculation of odd in this case is:
+
+$$
+o_{ik} = \frac{P(Y_{ik} = 1)}{P(Y_{ik} = 0)} = e^{\mu + \alpha_i + \beta X_{ik}} \cong  exp(3.76 -1.29class2 -2.52class3-0.04age-2.63male)
+$$
+
+An increase in age by 1 year would increase the odd by $e^{-0.04}$, a
+change from female to male will change the odd by $e^{-2.63}$, and a
+change from class 1 to class 2 will change the odd by $e^{-1.29}$. Since
+the exponential function is monotonous, all those changes will result in
+a lower probability of survival.
+
+#### Section b
+
+We investigated the interaction effect between age and class and sex and
+age on the survival status. We have the following null hypotheses:
+
+$H_0(1)$ *There is no interaction effect between age and class*
+
+$H_0(2)$ *There is no interaction effect between age and sex*
+
+The results are displayed below:
+
+```{r}
+tiglm2=glm(survive~class*age,data=titanic,family=binomial)
+summary(tiglm2)
+```
+
+```{r}
+tiglm3=glm(survive~sex*age,data=titanic,family=binomial)
+summary(tiglm3)
+```
+
+The result for *age \* class* **is not significant** (*p = 0.405; p =
+0.771*). while that for *age \* sex* **is significant** (*p \< 0.001*).
+Therefore, we reject $H_0(2)$ but preserve $H_0(1)$. We incorporated the
+interaction effect into the model we have in section a:
+
+```{r}
+tiglm4=glm(survive~sex*age+class,data=titanic,family=binomial)
+summary(tiglm4) 
+```
+
+Based on the result of this model, the main effects of sex and age are
+**no longer significant** when the interaction effect of *age \* sex* is
+incorporated. We predicted the probability of survival for each
+combination of levels of the factors class and sex for a person aged 55:
+
+```{r}
+new_data = expand.grid(
+  age = 55,
+  class = c("1st","2nd", "3rd"),
+  sex = c("female","male")
+)
+rownames(new_data) <- c("1st&female","2nd&female","3rd&female",
+                        "1st&male","2nd&male","3rd&male")
+predict(tiglm4,new_data,type = "response")
+```
+
+The probability of survival for a female in the 1st class is the highest
+(0.947), while that for a male in the 3rd class is the lowest (0.012).
+
+#### Section c
+
+The formula for the logistic regression is:
+
+$$
+P(Y_k = 1) = \frac{1}{1+e^{-x^{T}_{k}\theta}}, k = 1,2…,N
+$$
+
+where we want to estimate the parameter $\theta$. We can do this by
+splitting our data set into two parts (90% and 10%), where the bigger
+part is used for training the model and estimating $\theta$, while the
+smaller one is used for testing and validating our estimation. We can
+evaluate our model by comparing the result of our prediction with the
+true survival status and adjust our estimation based on the performance
+of our model.
+
+#### Section d
+
+Another approach to study the main effect of class and sex on the
+survival status is conducting Chi-square tests on contingency tables:
+
+```{r}
+# create a tab for variable sex and class
+tabd <- xtabs(~class+survive, data = titanic)
+tabd2 <- xtabs(~sex+survive, data = titanic)
+```
+
+```{r}
+z = chisq.test(tabd);z
+z2 = chisq.test((tabd2));z2
+```
+
+According to the Chi-square tests, both the effect of sex and class
+**are significant**(*p \<0.001*). However, this result deviates partly
+from what we got in section b, where we spotted an insignificant main
+effect of sex. This is because we didn't introduce the interaction
+effect in this case, unlike in section b. Inclusion of interaction and
+other additive variables may change the p-value.
+
+#### Section e
+
+Even though the results we got in sections d and b are not completely
+consistent, the approach in section d is not necessarily wrong. A
+contingency table can help us test whether two variables are independent
+or homogeneous. An advantage is that, before conducting any statistical
+test or making any calculation, we may already have a first intuition of
+the potential relationship between the two variables. This can be done
+by simply comparing values in different cells. The disadvantage is that
+we need at least 5 items in each cell to make sure that the Chi-square
+result is valid. This can be a problem when we are working with data
+that do not have enough items for each category. Sometimes dividing the
+data into different categories may not be trivial either. A contingency
+table is also harder to interpret when we have multiple variables and
+want to study the interaction effects among them.
+
+Logistic regression can incorporate a wide range of variables: binary,
+explanatory, and categorical (factors). A drawback is that it assumes a
+linear relationship between the outcome and predictors, so it may not
+work well for non-linear patterns.
